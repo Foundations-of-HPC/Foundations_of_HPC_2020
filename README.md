@@ -1,5 +1,5 @@
 # Foundations of HPC, 2020/2021
-This repository collects the materials from the course "Foundations of HPC" at Data Science and Scientific Computer, University of Trieste
+This repository collects the materials from the course "Foundations of HPC" at Data Science and Scientific Computer, University of Trieste, year 2020/2021
 
 Teachers:
 
