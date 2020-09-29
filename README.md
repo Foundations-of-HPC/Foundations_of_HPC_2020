@@ -4,6 +4,7 @@ This repository collects the materials from the course "Foundations of HPC" at D
 Teachers:
 
 **Stefano Cozzini**, Area di Ricerca, Trieste
+
 **Luca Tornatore**, INAF - National Institute for Astrophysics, Astronomical Observatory of Trieste
 
 Lab session are helped by:
