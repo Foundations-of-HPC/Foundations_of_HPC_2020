@@ -1,8 +1,14 @@
 # Foundations of HPC, 2020/2021
 This repository collects the materials from the course "Foundations of HPC" at Data Science and Scientific Computer, University of Trieste
+
 Teachers:
-Stefano Cozzini, Area di Ricerca, Trieste - ExactLab, Trieste
-Luca Tornatore, INAF - National Institute for Astrophysics, Astronomical Observatory of Trieste
+
+**Stefano Cozzini**, Area di Ricerca, Trieste + ExactLab, Trieste
+
+**Luca Tornatore**, INAF - National Institute for Astrophysics, Astronomical Observatory of Trieste
+
+Lab session are helped by:
+**Dott. Antonio Ragagnin**, INAF - National Institute for Astrophysics, Astronomical Observatory of Trieste
 
 ------
 
