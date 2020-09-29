@@ -31,11 +31,11 @@ On **Friday afternoon**, from 14:00 to 16:00, there will be a lab session with e
 
 The lectures will start on Wednesday, 7th October 2020
 
-|           | 9.00-9:55  | 10.00 - 11.00 | | 14.00 - 14:55 | 15:00 - 16.00 |
-| --------- | ---------- | ------------- | | ------------- | ------------- |
-| Wednesday |            |               | | first part    | second part   |
-| Friday    | first part | second part   | | lab           | lab           |
-| --------- | ---------- | ------------- | | ------------- | ------------- |
+
+|           | 9.00 - 9.55  | 10.00 - 11.00 | | 14.00 - 14.55 | 15.00 - 16.00 |
+| --------- | ---------- | ----------- | - |----------- | ----------- |
+| Wednesday |            |             | | first part  | second part |
+| Friday    | first part | second part | | lab         | lab         |
 
 
 
