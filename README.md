@@ -111,7 +111,7 @@ So, our advice is that on your laptop you run a Linux (of course, it is not need
 
 As a second option, you can install a Linux machine in a Virtual box under your preferred OS.
 
-As a third option, for Windows users, you can run Linux under the W10 WSL, that seems to be enough for our course needs.
+For Windows users, a third option is running Linux under the W10 WSL, that seems to be enough for our course needs.
 
 
 #### REFERENCES & BOOKS
