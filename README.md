@@ -93,7 +93,7 @@ For submitting 7 *successful* assignments in the due time before the end of the 
 | Wed, Dec 2  | [17] OpenMP / 3                                              |                                                      |                                                      |
 | Fri, Dec 4  | [18] OpenMP / 4                                              | [7] Exercises on OpenMP                              |                                                      |
 | Wed, Dec 9  | [19] MPI / 5                                                 |                                                      |                                                      |
-| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(2 weeks)*  |
+| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(3 weeks)*  |
 | Wed, Dec 16 | [21] Parallel HPC libraries / 1                              |                                                      |                                                      |
 | Fri, Dec 18 | [22] Parallel HPC libraries / 2 + benchmarking               | [9] Exercises on benchmarking HPC parallel libraries | [6] Assignment on Parallel HPC libraries  *(1 week)* |
 | Fri, Jan 8  | [23] Parallel Storage / 2                                    |                                                      |                                                      |
