@@ -51,7 +51,7 @@ Stefano Cozzini:  stefano.cozzini@areasciencepark.it
 
 Luca Tornatore:  luca.tornatore@inaf.it 
 
-The lab sessions will be assisted by Dott. Antonio Ragagnin, antonio.ragagnin@inaf.it
+Antonio Ragagnin:  antonio.ragagnin@inaf.it
 
 
 
@@ -104,6 +104,11 @@ For submitting 7 *successful* assignments in the due time before the end of the 
 | Wed, Jan 27 | [28] TBD - advanced materials                                |                                                      |                                                      |
 | Fri, Jan 29 | [29] TBD - advanced materials                                |                                                      |                                                      |
 
+#### PRACTICAL ADVICES
+As you will experiment, having a Linux is always the most adequate solution (Linux is running on the vast majority - possible the 100% - on HPC facilities and brings native tools and utilities for programming).
+So, our advice is that on your laptop you run a Linux (of course, it is not needed that you run *only* Linux: you may a have a multi-boot machine with any other OS you want).
+As a second option, you can install a Linux machine in a Virtual box under your preferred OS.
+As a third option, for Windows users, you can run Linux under the W10 WSL, that seems to be enough for our course needs.
 
 
 #### REFERENCES & BOOKS
