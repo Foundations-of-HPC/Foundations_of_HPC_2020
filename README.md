@@ -32,10 +32,10 @@ The scope of the course is to give you:
 
 
 The lectures will be both in presence (this may change in the future according to the evolution of the COVID pandemic) **and** in streaming; each lecture will also be recorded and available to be viewed asynchronously.
-The lectures (the precise calendar is shown in the table below) will be held in AULA BOH on **Wednesday afternoon** from 14:00 to 16:00, and **Friday morning** from 11:00 to 13:00.
+The lectures (the precise calendar is shown in the table below) will be held in **ROOMs 3B-H3** and **F-A** on **Wednesday afternoon** from 14:00 to 16:00, and **Friday morning** from 11:00 to 13:00.
 On **Friday afternoon**, from 14:00 to 16:00, there will be a lab session with exercises on the topics treated during the lectures.
 
-The lectures will start on Wednesday, 7th October 2020
+The lectures will **start on Wednesday, 7th October 2020**.
 
 
 |           | 9.00 - 9.55  | 10.00 - 11.00 | | 14.00 - 14.55 | 15.00 - 16.00 |
