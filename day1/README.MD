@@ -14,12 +14,11 @@ date: Wednesday 07/10/2020
      - section 1.2 for more example on HPC 
      - section 1.4 for SLOW model  
  - [FLOPS definition from wikipedia](https://en.wikipedia.org/wiki/FLOPS)
- - [HPC from European perspective](from https://ec.europa.eu/digital-single-market/en/high-performance-computing)
+ - [HPC from European perspective](https://ec.europa.eu/digital-single-market/en/high-performance-computing)
 
 
 ### additional materials 
 
  - [a short article on the exaflop day](https://nationaldaycalendar.com/national-exascale-day-october-18/)
  - [what can we do with an exascale machine](https://www.hpe.com/us/en/insights/articles/whats-with-the-18-zeros-2009.html)
- - [a short article on the 54th release of TOP500](TOP500list-Nov2019.pdf)
  - more to come 
