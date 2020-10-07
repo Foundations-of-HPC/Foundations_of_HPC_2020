@@ -14,6 +14,8 @@ date: Wednesday 07/10/2020
      - section 1.2 for more example on HPC 
      - section 1.4 for SLOW model  
  - [FLOPS definition from wikipedia](https://en.wikipedia.org/wiki/FLOPS)
+ - [HPC from European perspective](from https://ec.europa.eu/digital-single-market/en/high-performance-computing)
+
 
 ### additional materials 
 
