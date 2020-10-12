@@ -1,4 +1,4 @@
-## Day 1: introduction to course and introduction to  HPC 
+## Day 2: introduction  to  HPC (part2) 
 
 date: Friday 09/10/2020
 
@@ -11,8 +11,11 @@ date: Friday 09/10/2020
   
  - [Von Neumann architecture from wikipedia](https://en.wikipedia.org/wiki/Von_Neumann_architecture) 
  - [FLOPS definition from wikipedia](https://en.wikipedia.org/wiki/FLOPS)
+ - [ORFEO documentation](https://orfeo-documentation.readthedocs.io/en/latest/)
 
 
 ### additional materials 
 
- - [www.top500.org](https://www.top500.org]
+ - [the www.top500.org: it deserves a visit to check a few things](https://www.top500.org)
+ - [one simple tutorial to start using ssh](https://www.ssh.com/ssh/command/)
+ - [linux/unix shell short tutorial for novice users](http://swcarpentry.github.io/shell-novice/)
