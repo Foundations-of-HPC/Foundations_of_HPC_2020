@@ -1,15 +1,15 @@
-## Day 2: introduction  to  HPC (part2) 
+## Day 3: HPC software stack 
 
-date: Friday 09/10/2020
+date: Wednesday 14/10/2020
 
 ### lectures
- - Stefano Cozzini : [introduction to HPC-part2](lecture02-intro-to-HPC.pdf)
+ - Stefano Cozzini : [HPC software stack ](lecture03-HPC-software-stack.pdf)
 
 
 
 ### references
   
- - [Von Neumann architecture from wikipedia](https://en.wikipedia.org/wiki/Von_Neumann_architecture) 
+ - []() 
  - [FLOPS definition from wikipedia](https://en.wikipedia.org/wiki/FLOPS)
  - [ORFEO documentation](https://orfeo-documentation.readthedocs.io/en/latest/)
 
