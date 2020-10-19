@@ -3,9 +3,9 @@
 
 ### Due date : 23.59.02.11.2020
 
-***version 1.0 ( released at 17.00 19.10.2020)***
+***version 1.1 ( released at 19.16 19.10.2020)***
 
-#### Submission policy:  creating a directory on /fast/assignement1 /username on ORFEO and put all the files required there.
+#### Submission policy:  creating a directory on /fast/FHPC/assignement1/username on ORFEO and put all the files required there.
 
 hints:
 
@@ -33,7 +33,7 @@ where:
 
 - Report.pdf  will contain a detailed report of the sections  in this documents.
 
-- readme should explain which software stack you used to compile the code and run all the program we provided.
+- README should explain which software stack you used to compile the code and run all the program we provided.
  
 - all the *.csv file are commma separated values files all structured as follows (automatically checked)
 
@@ -48,7 +48,7 @@ where:
  where x1,x2,x3 are the time measured (see later) in different repetitions of the run
 ```` 
  
-*** We automatically check the structure of the file and the scalability results obtained by us with the same program***  
+***We automatically check the structure of the file and the scalability results obtained by us with the same program***  
  	    
 ## Section  1: theoretical model
 
@@ -65,7 +65,7 @@ where:
       $T_{comm}$ = *time  each processor takes to communicate one message, i.e. latency..*
       $T_{read}$   = *time  master takes to read* 
 
-    - N/P sum over each processors (including master)  ===> $T_{comp}/N$
+    - N/P sum over each processors (including master)  ===> $T_{comp}$/N$
 
     - Slaves send partial sum  ===>   $(P-1)T_{comm}$
 
@@ -77,7 +77,7 @@ where:
 
   - assumptions:
 
-    - $T_{comp} =2 \times 10^{-9}$
+    - $$T_{comp} =2 \times 10^{-9}$$
     - $T_{read}= 1 \times 10^{-4}$
     - $T_{comm}= 1 \times 10^{-6}$
 
@@ -92,17 +92,24 @@ where:
   - Can you try to modify the algorithm sketched above to increase its scalability ? 
 
     (hints: try to think a  better communication  algorithm) 
+    
+  -Fill in a cvs file with the value of P which gets the best results for the following values of N
 
 provide a csv with the following format
 
 ```
-#header: N, best P naive algorithm , best P for enhanced algorithm if any)
+#header: N, best P naive algorithm , best P for enhanced algorithm if any, if not just put XXX
 i.e
 
 ####
-100000 34, 100 
-188888
-```
+20000,  Pn,Pe
+100000, Pn,Pe
+200000, Pn,Pe
+1000000,Pn,Pe
+20000000,Pn,Pe
+
+````
+
 
 ## Section 2 : play with MPI program 
 
@@ -130,7 +137,7 @@ Please note that the parallel code writes walltime for all the processor involve
 
 We will keep the problem size constant, or in other words, keeping Niter = 100 millions. 
 
-- Keeping Niter = 10 millions, run the MPI code for 1, 4, 8 up to 48 MPI processs.
+- Keeping Niter = 100 millions, run the MPI code for 1, 4, 8 up to 48 MPI processs.
 
 In principle, all that needs to be done is to run the program multiple times, changing the -np argument to mpirun each time. Such a study could be as simple as the following bash for loop:
 
