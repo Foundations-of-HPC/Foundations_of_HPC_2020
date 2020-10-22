@@ -35,30 +35,82 @@
 #include <stdio.h>
 #include <string.h>
 
+#define SIZE 3
 
-
-int main( void )
+int main( void ) 
 {
+ #if defined(UP_FENCE)
+  int myprotection[ SIZE ];
+ #endif
+  int array[ SIZE ];
+ #if defined(DOWN_FENCE)
+  int myprotection[ SIZE ];
+ #endif
+
   register long long int myRBP __asm__("rbp");
   register long long int myRSP __asm__("rsp");
-  int array[ 3 ];
-  int myprotection[3];
-	
-  printf("RSP       : %p\n"
-	 "RBP       : %p\n"
-	 "array     : %p %p\n"
-	 "protection: %p %p\n",
+
+
+  //
+  // the following print will let you
+  // understand where the local variables
+  // are in the stack
+  // "distances" are expressed relatively to
+  // BP, which is the largest address in
+  // the current stack frame, so they are
+  // negative.
+  //
+  printf("RSP     : %p\n"          // the top of the stak (remind: it is the lowest address)
+	 "RBP     : %p\n\n"        // the base of the stack
+	 "RBP-RSP : %ld\n"         // the size of the stack
+	 "array[0]: %ld\n",	   // the position of the first element of array
 	 (void*)myRSP, (void*)myRBP,
-	 (void*)&array[0], (void*)&array[1],
-         (void*)&myprotection[0], (void*)&myprotection[1]);
+	 (void*)myRBP - (void*)myRSP,
+	 (void*)&array[0] - (void*)myRBP);
   
-  for ( int ii = 0; ii <= 3; ii++ )
+ #if defined(UP_FENCE) || defined(DOWN_FENCE)
+  printf("fence[0]: %ld\n", (void*)&myprotection[0] - (void*)myRBP );
+  if( ((void*)&myprotection[0] - (void*)&array[0]) < 0 )
+    printf("\n\n"
+	   ">>>  fence is down-hill, it will not work:\n"
+	   "     as you may have noticed, array grows up-hill\n"
+	   "     meaning that larger indexes have larger addresses.\n"
+	   "     Try to compile using an up-hill fence:\n"
+	   "        gcc -DUP_FENCE -o stacksmash_simple stacksmash_simple.c\n\n");
+
+  // the relative position of the local variables is compiler-dependent;
+  // there are no standards, the only criterion is usually to keep all the
+  // variables aligned to their size
+  // 
+ #endif
+
+    
+  for ( int ii = 0; ii <= SIZE+2; ii++ )
+    //
+    // the error in this for cycle is the
+    // termination condition, which should be
+    //    ii < SIZE
+    // if there are no fences and the code
+    // is compiled without stack protector
+    // (like the one implemented in gcc),
+    // array[] is close to the base of stack
+    // and this for cycle will corrupt the
+    // return address causing a seg fault
+    // with high probability
+    //
     {
-      printf("accessing %d-th element: %p\n", ii, &array[ii] );
+      if ( ii == 0 )
+	printf("ii      : %ld\n", (void*)&ii - (void*)myRBP);   // the position of the for cycle counter
+      
+      printf("accessing %d-th element: %ld\n", ii, (void*)&array[ii] - (void*)myRBP);
       array[ ii ] = ii;
     }
 
-  printf("everything went well\n");
+
+  //
+  // EXERCISE: try to smash the SP, for instance with a different for cycle
+  // for ( int ii = SIZE; --ii > -3; )
+  // 
   
   return 0;
 }

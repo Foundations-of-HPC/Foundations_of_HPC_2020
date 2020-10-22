@@ -75,7 +75,7 @@ int main ( int argc, char **argv )
   for ( int ii = 0; ii < argc; ii++ )
     {
       printf("\targ%d's pointer resides at %p [ %zd bytes-offset from RSP]\n"
-	     "\t\targ%d resides at %p [ %zd bytes-offset from RSP]\n",
+	     "\targ%d resides at %p [ %zd bytes-offset from RSP]\n\n",
 	     ii,
 	     argv + ii,
 	     (void*)(argv+ii) - (void*)myRSP,
@@ -86,9 +86,11 @@ int main ( int argc, char **argv )
   int    add_4bytes_to_stack;
   double add_8bytes_to_stack;
 
-  printf("after new local variables:\n"
+  printf("after new local variables (*):\n"
 	 "My RBP points to %p\n"
-	 "My RSP points to %p\n",
+	 "My RSP points to %p\n"
+	 "\n(*) most likely, the stack has not changed because the compiler\n"
+	 "    already knew about these latter variales\n\n",
 	 (void*)myRBP, (void*)myRSP );
 
   printf("\tadd_8bytes_to_stack resides at %p [ %zd bytes-offset from RSP]\n"
