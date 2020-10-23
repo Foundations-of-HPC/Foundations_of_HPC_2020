@@ -1,5 +1,5 @@
 
-COMPILER=pgcc
+COMPILER=gcc
 
 ifeq ($(COMPILER),gcc)
 CC = gcc
