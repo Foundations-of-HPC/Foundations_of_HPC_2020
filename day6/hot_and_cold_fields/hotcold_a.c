@@ -21,11 +21,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#define _XOPEN_SOURCE 700
+#define _XOPEN_SOURCE 700  // ensures we're using c11 standard
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-//#include "ptiming.h
+#include <strings.h>
 #include <time.h>
 
 

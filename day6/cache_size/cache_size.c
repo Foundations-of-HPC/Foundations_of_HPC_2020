@@ -21,13 +21,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+#if defined(__STDC__)
+#  if (__STDC_VERSION__ >= 201112L)    // c11
+#    define _XOPEN_SOURCE 700
+#  elif (__STDC_VERSION__ >= 199901L)  // c99
+#    define _XOPEN_SOURCE 600
+#  else
+#    define _XOPEN_SOURCE 500          // c90
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#if _XOPEN_SOURCE >= 600
+#  include <strings.h>
+#endif
 
 #include <papi.h>
-//#include <ptiming.h>
 
 #define PCHECK(e) \
   if ( e!= PAPI_OK)						\

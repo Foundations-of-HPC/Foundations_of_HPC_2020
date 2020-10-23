@@ -22,10 +22,25 @@
  */
 
 
+#if defined(__STDC__)
+#  if (__STDC_VERSION__ >= 201112L)    // c11
+#    define _XOPEN_SOURCE 700
+#  elif (__STDC_VERSION__ >= 199901L)  // c99
+#    define _XOPEN_SOURCE 600
+#  else
+#    define _XOPEN_SOURCE 500          // c90
+#endif
+
+#define _GNU_SOURCE                // this is to avoid problems with the 
+                                   //   definition of alloca()
+
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#if _XOPEN_SOURCE >= 600
+#  include <strings.h>
+#endif
 #include <sys/resource.h>
 
 #define STACKSMASH  8*1024*1024    // <<--- set this to the number of bytes

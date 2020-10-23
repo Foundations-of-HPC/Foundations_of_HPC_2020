@@ -32,21 +32,20 @@
  * ----------------------------------------------------------------- */
 
 
-#ifndef _XOPEN_SOURCE
-#if __STDC_VERSION__ == 199901L           // c99
-#define _XOPEN_SOURCE 600
-#elif __STDC_VERSION__ == 201112L         // c11
-#define _XOPEN_SOURCE 700
-#else
-#define _XOPEN_SOURCE 500                 // c90
-#endif
+#if defined(__STDC__)
+#  if (__STDC_VERSION__ >= 201112L)    // c11
+#    define _XOPEN_SOURCE 700
+#  elif (__STDC_VERSION__ >= 199901L)  // c99
+#    define _XOPEN_SOURCE 600
+#  else
+#    define _XOPEN_SOURCE 500          // c90
 #endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #if _XOPEN_SOURCE >= 600
-#include <strings.h>
+#  include <strings.h>
 #endif
 
 
