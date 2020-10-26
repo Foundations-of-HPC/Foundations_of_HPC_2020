@@ -30,6 +30,7 @@
 #    define _XOPEN_SOURCE 600
 #  else
 #    define _XOPEN_SOURCE 500          // c90
+#  endif
 #endif
 
 

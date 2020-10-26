@@ -33,6 +33,7 @@
 #    define _XOPEN_SOURCE 600
 #  else
 #    define _XOPEN_SOURCE 500          // c90
+#  endif
 #endif
 
 #include <stdlib.h>
@@ -41,7 +42,6 @@
 #if _XOPEN_SOURCE >= 600
 #  include <strings.h>
 #endif
-#include <math.h>
 #include <sys/resource.h>
 #include <sys/times.h>
 #include <time.h>

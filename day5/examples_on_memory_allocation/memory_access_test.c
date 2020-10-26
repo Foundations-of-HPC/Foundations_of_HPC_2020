@@ -28,8 +28,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <stdint.h>
-#include <ptiming.h>
 #define __USE_GNU
 #include <sched.h>
 
