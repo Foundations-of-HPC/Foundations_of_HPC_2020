@@ -2,14 +2,24 @@
 # First Assigment  FHPC course 2020/2021
 
 ### Due date : 23.59.02.11.2020
+### NEW Due date : 23.59.13.11.2020
 
-***version 1.1 ( released at 19.16 19.10.2020)***
+***version 1.2 ( released at 19.16 19.10.2020)***
 
-#### Submission policy:  creating a directory on /fast/FHPC/assignement1/username on ORFEO and put all the files required there.
+#### Submission policy:  creating a directory on /fast/dssc/Assignement01/username on ORFEO and put all the files required there.
 
 hints:
 
-`` mkdir /fast/FHPC/assignement1/my_username`` 
+`` mkdir /fast/dssc/Assignement01/my_username`` 
+
+### COMPUTATIONAL RESOURCES:
+
+I added three more nodes on dssc queue with 24 cores and with a slightly diffferent CPU.
+Hyperthreading is not enabled on this nodes.
+To select them:
+
+
+
 
 ### Structure of directory: automatically checked. 
 
@@ -37,16 +47,35 @@ where:
  
 - all the *.csv file are commma separated values files all structured as follows (automatically checked)
 
--strong-scalability-10to08: 
+-strong-scalability-10to08 
 
+This is for GPU nodes:
 ```` 
- #header line  # processors run1,run2,run3,avg,error_bar  
- 1,x1,x2,x3,<x>,(xmax-xmin)/2
+ #header line: GPU processors,avg,error_bar,run1,run2,run3,... runN
+ 1,avg,(xmax-xmin)/2,x1,x2,x3,xn.. 
  4......
  8..
  up to 48 in steps of 4 
- where x1,x2,x3 are the time measured (see later) in different repetitions of the run
+ where x1,x2,x3,xn..  are the time measured (see later) in different repetitions of the run
 ```` 
+ 
+This is for THIN nodes:
+
+``` 
+ #header line: THIN processors,avg,error_bar,run1,run2,run3,... runN  
+ 1,avg,(xmax-xmin)/2,x1,x2,x3,xn.. 
+ 2......
+ 4..
+ up to 24 in steps of 2 
+ where x1,x2,x3,xn..  are the time measured (see later) in different repetitions of the run
+```` 
+ 
+The file for 100 billion moves (weak-scalability-10to11.csv/ strong-scalability-10to11.csv) should be provided with a less number of steps: 
+ - 1/12/24/48 for GPU nodes
+ - 1/6/12/24   for THIN nodes 
+ 
+
+ 
  
 ***We automatically check the structure of the file and the scalability results obtained by us with the same program***  
  	    
