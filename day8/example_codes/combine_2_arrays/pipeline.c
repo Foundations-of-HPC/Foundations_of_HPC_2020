@@ -93,7 +93,7 @@
 						      memory */
 
 #ifndef _MEM_CLOCK        // the clock of the DRAM, in Mhz
-#define _MEM_CLOCK 1867	  
+#define _MEM_CLOCK 2133	  
 #endif
 #ifndef _MEM_WIDTH        // the width in bits of a DRAM chunk
 #define _MEM_WIDTH 64	  
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 						      ------------------------------------ */
       PAPI_START_CNTR;
 
-#include STR(BASENAME PIPELINE SUFFIX)      
+#include STR(BASENAME PIPELINE SUFFIX)
 
       PAPI_STOP_CNTR;
       
