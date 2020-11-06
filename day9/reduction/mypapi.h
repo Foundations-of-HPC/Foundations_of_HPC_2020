@@ -3,11 +3,13 @@
 #if defined(USE_PAPI)                                           // -----------------------------------------------------------
 #include <papi.h>
 
-#define PAPI_EVENTS_NUM 2
-int       papi_events[PAPI_EVENTS_NUM] = {PAPI_TOT_INS, PAPI_TOT_CYC };
-int       papi_EventSet                = PAPI_NULL;             // the handle for the events' set
-long long papi_buffer[PAPI_EVENTS_NUM] = {0};                   // storage for the counters' values
-long long papi_values[PAPI_EVENTS_NUM] = {0};                   // accumulate the counters' values
+typedef unsigned long long int uLint;
+
+#define PAPI_EVENTS_NUM 3
+int   papi_events[PAPI_EVENTS_NUM] = {PAPI_TOT_INS, PAPI_TOT_CYC, PAPI_L1_DCM };
+int   papi_EventSet                = PAPI_NULL;             // the handle for the events' set
+uLint papi_buffer[PAPI_EVENTS_NUM] = {0};                   // storage for the counters' values
+uLint papi_values[PAPI_EVENTS_NUM] = {0};                   // accumulate the counters' values
 
                                                                 // check that PAPI is OK, exit if not
 #define PAPI_CHECK( R ) {						\
@@ -61,6 +63,13 @@ if( retval == PAPI_OK ) {						\
   for( int jj = 0; jj < PAPI_EVENTS_NUM; jj++)				\
     papi_values[jj] += papi_buffer[jj]; } else PAPI_WARN(retval, "reading counters"); }
 
+#define PAPI_FLUSH_BUFFER {				\
+    for( int jj = 0; jj < PAPI_EVENTS_NUM; jj++)	\
+      papi_buffer[ jj] = 0; }
+
+#define PAPI_FLUSH {					\
+    for( int jj = 0; jj < PAPI_EVENTS_NUM; jj++)	\
+      papi_values[jj] = papi_buffer[ jj] = 0; }
 
 
 #else                                                           // -----------------------------------------------------------

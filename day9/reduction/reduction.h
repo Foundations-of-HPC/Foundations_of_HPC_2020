@@ -8,8 +8,8 @@
 //
 #if !defined(ITYPE)
 #warning "compiling with double type"
-#define DTYPE  double              // type of data
-#define DATYPE long double         // type for accumulator
+#define DTYPE  double         // type of data
+#define DATYPE double         // type for accumulator
 #else
 #warning "compiling with int type"
 #define DTYPE  unsigned int               // type of data
@@ -24,6 +24,8 @@ typedef unsigned long long int uLint;
 // ------------------------------------------------------------------
 
 
+#define CONCAT(x,y) x ## y
+
 // ─────────────────────────────────────────────────────────────────
 // define the timing routines
 //
@@ -34,6 +36,14 @@ typedef unsigned long long int uLint;
 
 //
 // ------------------------------------------------------------------
+
+
+// ─────────────────────────────────────────────────────────────────
+// define the vector generator
+//
+
+#define DEFINE_VECT( T, N, NAME ) typedef T v##NAME __attribute__((vector_size( sizeof(T) * N))); typedef union { v##NAME v; T s[N]; } u##NAME;
+
 
 
 // ─────────────────────────────────────────────────────────────────
@@ -69,3 +79,8 @@ typedef unsigned long long int uLint;
 #else
 #define PRINTF(...)
 #endif
+
+
+
+DEFINE_VECT( DTYPE, 4, 4d );
+DEFINE_VECT( long int, 4, 4i );

@@ -33,14 +33,19 @@
 #include <string.h>
 #include <strings.h>
 #include <time.h>
-
+#include "mypapi.h"
 
 #define TCPU (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts ), (double)ts.tv_sec +\
 	      (double)ts.tv_nsec * 1e-9)
 
-#include <stdio.h>
-#include <sys/time.h>
-#include <stdlib.h>
+#define NVERSIONS               3
+#define SELECT_mask             (1+(1<<1))
+#define COMPARE_WITH_PLAIN_mask (1<<2)
+#define CHECK_OCCURRENCES_mask  (1<<3)
+#define ALL_mask                (~((1<<4)-1))
+
+
+char *version_labels[NVERSIONS] = {"NON-optimized", "Optimized", "Tailed" };
 
 #define HELP_MESSAGE "\n"						\
   " Calculates C(n,o) = A(n,m) * B(m,o) \n"				\
@@ -61,6 +66,12 @@ void init_matrix(double* M, int n, int m, double v)
       for ( int j = 0; j < m; j++)
 	M[off + j ] = off + j;
     }
+  return;
+}
+
+void clean_matrix(double* M, int n, int m)
+{
+  memset( M, 0, n*m * sizeof(double));
   return;
 }
 
@@ -91,39 +102,63 @@ unsigned int compare_matrices( double *A, double *B, int R, int C, double tolera
   return errors;
 }
 
-unsigned int check_matrix( double *M, int Ar, int Ac, int Bc, double vA, double vB, double tolerance)
-/*
- * d.o  n.o.t  u.s.e
- * not yet working
- * 
- */  
+unsigned int check_matrix( double *M, int R, int C, double tolerance) //, int Bc, double vA, double vB, double tolerance)
 {
-  double _Ac          = (double)Ac;
-  double _Bc          = (double)Bc;
-  double AcBc         = _Ac * _Bc;
-  double sum          = (double)( Ac*(Ac-1)/2 );
-  int    t            = Ac-1;  
-  double Bc_sum2      = _Bc * (double)( t + t*t*3 + t*t*t*2 ) / 6.0;
+
+  /*
+   * this checks that every entry in the matrix M has the correct value C
+   *   
+   * In fact, this check should be used with the flag CHECK_OCCURRENCES_mask
+   * In that case the product matrix is not set to the correct values:
+   * every entry is set to the number of times it had received a contribution,
+   * which, by construction, should be exactly C
+   * 
+   * This is to check that actually the tiling is done properly and, at least
+   * each entry of the product matrix receives the right number of contributions
+   */
   
+  double       value  = (double)C;
   unsigned int errors = 0;
+  for ( int i = 0; i < R; i++ ) {
+    int off = i*C;
+    for ( int j = 0; j < C; j++ ) {
+      double ratio = (M[ off + j ] - value) / value;
+      ratio = (ratio > 0 ? ratio: -ratio);
+      errors += ( ratio > tolerance ); }}
+
+
+  /*
+   * d.o  n.o.t  u.s.e
+   * not yet working
+   * 
+   */  
+
+  /* double _Ac          = (double)Ac; */
+  /* double _Bc          = (double)Bc; */
+  /* double AcBc         = _Ac * _Bc; */
+  /* double sum          = (double)( Ac*(Ac-1)/2 ); */
+  /* int    t            = Ac-1;   */
+  /* double Bc_sum2      = _Bc * (double)( t + t*t*3 + t*t*t*2 ) / 6.0; */
   
-  for ( int i = 0; i < Ar; i++ )
-    {
-      int     iA    = i*Ac;
-      double  iAcBc = i * AcBc;
 
-      for ( int j = 0; j < Bc; j++ )
-	{
-	  double _j = (double)j;
+  
+  /* for ( int i = 0; i < Ar; i++ ) */
+  /*   { */
+  /*     int     iA    = i*Ac; */
+  /*     double  iAcBc = i * AcBc; */
 
-	  double res   = sum*(iAcBc + _j + 2*i*_j) + Bc_sum2;
+  /*     for ( int j = 0; j < Bc; j++ ) */
+  /* 	{ */
+  /* 	  double _j = (double)j; */
 
-	  double ratio = (M[ iA + j ] - res) / res;
-	  ratio = (ratio > 0 ? ratio: -ratio);
-	  if( ratio > tolerance )
-	    errors++;
-	}
-    }
+  /* 	  double res   = sum*(iAcBc + _j + 2*i*_j) + Bc_sum2; */
+
+  /* 	  double ratio = (M[ iA + j ] - res) / res; */
+  /* 	  ratio = (ratio > 0 ? ratio: -ratio); */
+  /* 	  if( ratio > tolerance ) */
+  /* 	    errors++; */
+  /* 	} */
+  /*   } */
 	 
   return errors;	
 }
@@ -143,7 +178,8 @@ void straightforward(double* A, double* B, double* C, int Ar, int Ac, int Bc)
  * note - C = Ar x Bc
  */
 {
-
+  PAPI_START_CNTR;
+  
   for ( int i = 0; i < Ar; i++ )
     // traverse the A's rows
     //
@@ -162,6 +198,8 @@ void straightforward(double* A, double* B, double* C, int Ar, int Ac, int Bc)
 	  //
 	  C[iC_off + k] += A[iA_off + j] * B[j*Bc + k];
     }
+
+  PAPI_STOP_CNTR;
 }
 
 
@@ -184,7 +222,8 @@ void straightforward_opt(double* A, double* B, double* C, int Ar, int Ac, int Bc
  * note - C = Ar x Bc
  */
 {
-
+  PAPI_START_CNTR;
+  
   for ( int i = 0; i < Ar; i++ )
     // traverse the A's rows
     {
@@ -206,11 +245,16 @@ void straightforward_opt(double* A, double* B, double* C, int Ar, int Ac, int Bc
 	    C[iC_off + k] += A[iA_off + j] * B[jB_off + k];
 	}
     }
+
+  PAPI_STOP_CNTR;
 }
 
 
 
-void straightforward_opt_blocks(double * restrict A, double * restrict B, double * restrict C, int Ar, int Ac, int Bc, int Arb, int Acb, int Bcb)
+void straightforward_opt_blocks ( double * restrict A, double * restrict B, double * restrict C,
+				  int Ar, int Ac, int Bc,
+				  int Arb, int Acb, int Bcb )
+  
 /*
  * implements schoolbook's matrix multiplication directly from
  * schoolbook's definition
@@ -231,6 +275,8 @@ void straightforward_opt_blocks(double * restrict A, double * restrict B, double
  * note - C = Ar x Bc
  */
 {
+  PAPI_START_CNTR;
+  
   int Ar_N = Ar / Arb + Ar % Arb;
   int Ac_N = Ac / Acb + Ac % Acb;
   int Bc_N = Bc / Bcb + Bc % Bcb;
@@ -270,12 +316,16 @@ void straightforward_opt_blocks(double * restrict A, double * restrict B, double
 		      for ( int k = k_start; k < k_end; k++)
 			// run over B's and C's columns
 			//
+			//C[iC_off + k] += 1.0; // to be used with check_matrix
+			                        // instaed of the next line
 			C[iC_off + k] += A[ij_off] * B[j_off + k];
 		    }
 		}
 	    }
 	}
     }
+
+  PAPI_STOP_CNTR;
 }
 
 
@@ -316,20 +366,21 @@ int main(int argc, char** argv)
    // set / get parameters for blocking implementation
    //
    int Arb, Acb, Bcb;
-   if ( w == 2 )
+   if ( w & 2 )
      {
-       if ( argc < 8 ) { printf( HELP_MESSAGE, argv[0] ); return 1; }
-       Arb = atoi(argv[5]);  // A's # of rows
-       Acb = atoi(argv[6]);  // A's # of columns = B's # of rows
-       Bcb = atoi(argv[7]);  // B's # of columns       
+       if ( argc > 5 ) { if (argc < 8 ) { printf( HELP_MESSAGE, argv[0] ); return 2; };
+	 Arb = atoi(argv[5]);  // A's # of rows
+	 Acb = atoi(argv[6]);  // A's # of columns = B's # of rows
+	 Bcb = atoi(argv[7]); }// B's # of columns       
+       else
+	 Arb = Acb = Bcb = ( Ac > 128 ? 128 : Ac/2);
+       printf("using block size: %d %d %d\n", Arb, Acb,Bcb);
      }
-   else
-     Arb = Acb = Bcb = ( Ac > 128 ? 128 : Ac/2);
 
    // print memory occupation
    // 
    unsigned long long int allocation_size = ((Ar * Ac) + (Ac * Bc) + (Ar * Bc));
-   if ( w > 4 )
+   if ( w & COMPARE_WITH_PLAIN_mask )
      // if we are requesting to verify the results,
      // we need some additional memory
      //
@@ -347,68 +398,91 @@ int main(int argc, char** argv)
 
    // initialize matrices
    //
-   init_matrix(A, Ar, Ac, 0);
-   init_matrix(B, Ac, Bc, 0);  
-
+   init_matrix (A, Ar, Ac, 0);
+   init_matrix (B, Ac, Bc, 0);  
+   clean_matrix(C, Ar, Bc);
+   
    // some useful variables
    //
    struct timespec  ts;
-   char             buffer[100];
+   int              version = w & SELECT_mask;
    double           tbegin, tstop;
-   double          *target = C;
-   double          *D = NULL;
-   if ( w > 4 )
-     {
-       D      = malloc(Ar * Bc * sizeof(double));
-       target = D;
-       printf("calculating AxB with the naive implementation..");
-       straightforward(A, B, C, Ar, Ac, Bc);
-       printf("done\n");
-     }
+
+   PAPI_INIT;
    
-   switch( w & 3 )     // mask the 2 least significant bits
+   switch( version )     // mask the 2 least significant bits
+                         // so to check the implementation to run
      {
      case 0:
        tbegin = TCPU;
-       straightforward(A, B, target, Ar, Ac, Bc);
+       straightforward(A, B, C, Ar, Ac, Bc);
        tstop   = TCPU - tbegin;
-       sprintf ( buffer, "%20s", "NON-optimized");
        break;
-   
+       
      case 1:       
        tbegin = TCPU;
-       straightforward_opt(A, B, target, Ar, Ac, Bc);
+       straightforward_opt(A, B, C, Ar, Ac, Bc);
        tstop   = TCPU;
-       sprintf ( buffer, "%20s", "Optimized");
        break;
 
      case 2:
        tbegin = TCPU;
-       straightforward_opt_blocks(A, B, target, Ar, Ac, Bc, Arb, Acb, Bcb);
+       straightforward_opt_blocks(A, B, C, Ar, Ac, Bc, Arb, Acb, Bcb);
        tstop   = TCPU;
-       sprintf ( buffer, "%20s", "Optimized+blocks");
        break;
        
      default:
-       if ( w > 6 )
-	 printf("uknown request number: %d\n", w);
-       
+       if ( w & ALL_mask )
+	 printf("unknown request number: %d\n", w);       
      }
 
-   printf( "%20s elapsed time: %9.4f s\n\n", buffer, tstop);
-   
-   if (D == NULL)
+   printf( "elapsed time: %9.4f s for version: %-20s\n\n", tstop, (version < NVERSIONS? version_labels[w & SELECT_mask] : ""));
+
+   if ( w & COMPARE_WITH_PLAIN_mask )
      {
+       double *D = malloc(Ar * Bc * sizeof(double));
+       printf("calculating AxB with the naive implementation..");
+       straightforward(A, B, D, Ar, Ac, Bc);
+       printf("done\n"
+	      "checking the result against plain implementation.. ");
        unsigned int errors_check = compare_matrices( C, D, Ar, Bc, 1e-4);
        printf("%u errors detected\n", errors_check);
        free(D);
-     }   
+     }
+   
+   if ( w & CHECK_OCCURRENCES_mask )
+     {
+       printf("checking the # of times each entries has been updated.. ");
+       unsigned int errors_check = check_matrix( C, Ar, Bc, 1e-4);
+       printf("%u errors detected\n", errors_check);
+     }
    
    free(A);
    free(B); 
    free(C);
 
    printf("done\n");
+   
+  #if defined(USE_PAPI)
+   uLint N3 = (uLint)Ar * (uLint)Ac * (uLint)Bc;
+   printf( "%25s: %-4.2g\n"
+	   "%25s: %-6.4g\n"
+	   "%25s: %-6.4g\n"
+	   "%25s: %-6.4g\n",
+	   
+	   "IPC",
+	   (double)papi_values[0] / papi_values[1],
+	   
+	   "time-per-element (nsec)",
+	   tstop / N3 * 1e9,
+
+	   "cycles-per-element",
+	   (double)papi_values[1] / N3,
+
+	   "L1miss-per-element",
+	   (double)papi_values[2] / N3);
+
+  #endif
    
    return 0;
 
