@@ -2,7 +2,7 @@
 # First Assigment  FHPC course 2020/2021
 
 ### Due date : 23.59.02.11.2020
-### NEW Due date : 23.59.13.11.2020
+### NEW Due date : 23.59.15.11.2020
 
 ***version 1.2 ( released at 19.16 19.10.2020)***
 
