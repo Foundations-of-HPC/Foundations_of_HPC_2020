@@ -55,7 +55,7 @@ int main( int argc, char **argv )
   
   {   
     
-    my_thread_id = omp_get_thread_num();
+    my_thread_id = omp_get_thread_num();  // note: this assignment is not thread-safe
     sleep(0.05);
     #pragma omp master
     nthreads = omp_get_num_threads();

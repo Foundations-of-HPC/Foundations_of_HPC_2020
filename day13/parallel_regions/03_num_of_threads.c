@@ -82,9 +82,13 @@ int main( int argc, char **argv )
     {
       int max_allowed = omp_get_max_threads();
       if ( max_allowed != threads_num )
-	printf("\t>>> your OMP_DYNAMIC variable is set to FALSE, you can not\n"
-	       "\t    dynamically adapt the number of threads in a parallel region\n"
-	       "\t    (which is currently fixed to %d) but using \"omp_set_num_threads()\"\n", max_allowed );
+	printf("\t>>> your OMP_DYNAMIC variable is set to FALSE\n"
+	       "\t    your omp could not adapt the number of threads in"
+	       "\t    a parallel region to optimize the use of the system.\n"
+	       "\t    Still, you can adapt the number of threads by hands\n"
+	       "\t    in each parallel region by using \"omp_set_num_threads()\"\n"
+	       "\t    Currently, the default maximum allowed number of threads\n"
+	       "\t    in a PR (without you modifying that) is %d\n", max_allowed );
     }
 
   omp_set_num_threads( threads_num );

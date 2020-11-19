@@ -53,7 +53,9 @@ int main( int argc, char **argv )
   
   {   
     
-    int my_thread_id = omp_get_thread_num();
+    int my_thread_id = omp_get_thread_num();  // note: this assignment is now
+                                              // thread-safe because the lvalue
+					      // is a private variable
     #pragma omp master
     nthreads = omp_get_num_threads();
 
@@ -67,6 +69,7 @@ int main( int argc, char **argv )
 #else
   
   nthreads = 1;
+  printf( "\tgreetings from thread num 0\n");
 #endif
   
   printf(" %d thread%s greeted you from the %sparallel region\n",
