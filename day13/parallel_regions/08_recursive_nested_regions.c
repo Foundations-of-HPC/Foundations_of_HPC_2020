@@ -88,8 +88,8 @@
 int function( char*, int );
 
 
-int nesting_is_active = 0;
-int max_nesting_level = 1;
+int nesting_is_active  = 0;
+int max_nesting_levels = 1;
 
 /*
  * ------------------------------------------------------------ */
@@ -121,9 +121,16 @@ int main( int argc, char **argv )
 #pragma omp single
     {
       if( nesting_is_active  = omp_get_nested() )
-	  max_nesting_level  = omp_get_max_active_levels();
+	  max_nesting_levels  = omp_get_max_active_levels();
     }
 
+   #if defined(__GNUC__)
+    if ( max_nesting_levels > 1000000 ) {
+      printf("somehing is strange in your max_active_level: I've got the value %u\n",
+	     max_nesting_levels ); return 1;}
+    else
+   #endif
+      printf("I've got that you allow %u nested levels\n", max_nesting_levels);
     function( "00.00", nthreads );
 
 
@@ -135,20 +142,25 @@ int function( char *father_name, int next )
 {
 
 //
-#define ENFORCE_ORDERED_OUTPUT( ORDER, ID, MSG ) {	\
-  int done = 0;						\
-  while( !done ) { if ( (ORDER) == (ID) ) {		\
-    printf("%s", (MSG)); (ORDER)++; done=1; } } }
 
+ #if !(defined(__ICC) || defined(__INTEL_COMPILER))
+ #define ENFORCE_ORDERED_OUTPUT( MSG )				\
+  _Pragma("pragma omp for ordered")				\
+    for(int oo = 0; oo < omp_get_num_threads(); oo++)		\
+  _Pragma("pragma omp ordered")	                                \
+    printf("%s", (MSG));
+ #else
+ #define ENFORCE_ORDERED_OUTPUT( MSG ) printf("%s", (MSG));
+ #endif
 
 //
 #define GET_LEVEL_INFO				\
   int myid = omp_get_thread_num();		\
   int this_level = omp_get_active_level();			\
-  int eff_level  = MIN( max_nesting_level, this_level);		\
+  int eff_level  = MIN( max_nesting_levels, this_level);	\
 								\
-  char buffer[max_nesting_level+1];				\
-  memset( buffer, 0, max_nesting_level+1);			\
+  char buffer[max_nesting_levels+1];				\
+  memset( buffer, 0, max_nesting_levels+1);			\
   for( int ii = 0; ii < eff_level; ii++)			\
     buffer[ii] = '\t'; 
 
@@ -163,7 +175,7 @@ int function( char *father_name, int next )
 									\
   char message[1000];							\
   sprintf(message, "%s%s at level %d/%d\n",				\
-	  buffer, myname,this_level, max_nesting_level);
+	  buffer, myname,this_level, max_nesting_levels);
 
   if ( next < 2)
       {
@@ -178,6 +190,7 @@ int function( char *father_name, int next )
       // here each thread gets its own id and
       // the current level of parallel nesting
       //
+
       GET_LEVEL_INFO;
 
       // here each thread just setup the string
@@ -189,7 +202,7 @@ int function( char *father_name, int next )
       // here the strings just prepared are
       // printed respecting the id order
       //
-      ENFORCE_ORDERED_OUTPUT( order, myid, message );
+      ENFORCE_ORDERED_OUTPUT( message );
 
       // wait for all the threads
       // to arrive at this point, just to
