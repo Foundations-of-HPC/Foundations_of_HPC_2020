@@ -50,7 +50,7 @@
 
 
 #if !defined(WATCH_THREADS)
-#define WATCH_THREADS 2.5
+#define WATCH_THREADS 5
 #endif
 
 #if !defined(WAIT)
@@ -144,15 +144,16 @@ int function( char *father_name, int next )
 //
 
  #if !(defined(__ICC) || defined(__INTEL_COMPILER))
- #define ENFORCE_ORDERED_OUTPUT( MSG )				\
-  _Pragma("pragma omp for ordered")				\
-    for(int oo = 0; oo < omp_get_num_threads(); oo++)		\
-  _Pragma("pragma omp ordered")	                                \
-    printf("%s", (MSG));
+ #define ENFORCE_ORDERED_OUTPUT( MSG ) {			\
+    int done = 0;						\
+    while( !done ) {						\
+      _Pragma("pragma omp critical(output)")			\
+	if( myid == order ) { printf("%s", (MSG));		\
+      order++; done=1;}}}
  #else
  #define ENFORCE_ORDERED_OUTPUT( MSG ) printf("%s", (MSG));
  #endif
-
+  
 //
 #define GET_LEVEL_INFO				\
   int myid = omp_get_thread_num();		\
