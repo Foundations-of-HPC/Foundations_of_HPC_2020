@@ -124,13 +124,24 @@ int main( int argc, char **argv )
 	  max_nesting_levels  = omp_get_max_active_levels();
     }
 
-   #if defined(__GNUC__)
+
     if ( max_nesting_levels > 1000000 ) {
+      // this check is due to the fact that when OMP_NEST is defined TRUE but
+      // OMP_MAX_ACTIVE_LEVELS is NOT defined, gcc sets the latter to the
+      // weird value MAX_INT (i.e. 2147483647 = (1<<31)-1 )
+      //
+      // pgi' and intel's compilers instead sets it to the more reasonable value of 1
+      //
       printf("somehing is strange in your max_active_level: I've got the value %u\n",
-	     max_nesting_levels ); return 1;}
-    else
-   #endif
-      printf("I've got that you allow %u nested levels\n", max_nesting_levels);
+	     max_nesting_levels );
+     #if defined(__GNUC__)
+      printf("..in fact, you're using GCC.\n");
+     #endif
+      return 1;
+    }
+
+    printf("I've got that you allow %u nested levels\n", max_nesting_levels);
+    printf("I start recursion with %d threads\n", nthreads);
     function( "00.00", nthreads );
 
 
