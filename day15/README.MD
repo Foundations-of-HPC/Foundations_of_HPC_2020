@@ -3,7 +3,7 @@
 date: Friday 30/11/2020
 
 ### lectures
- - Stefano Cozzini : [domain decomposition with MPI](lecture07-Domain-decomposition-with-MPI.pdf)
+ - Stefano Cozzini : [domain decomposition with MPI](lecture07-Domain-Decomposition-with-MPI.pdf)
 
 
 ### references
