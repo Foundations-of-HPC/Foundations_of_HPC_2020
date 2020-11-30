@@ -1,6 +1,6 @@
 ## Day 15: domain decomposition with MPI 
 
-date: Friday 30/11/2020
+date: Monday 30/11/2020
 
 ### lectures
  - Stefano Cozzini : [domain decomposition with MPI](lecture07-Domain-decomposition-with-MPI.pdf)
@@ -15,5 +15,9 @@ It is a "simple" fortran implementation of the Jacobi solver in 3D
 
 To compile, load the MPI module and then: 
 
- ` 
+ ` mpif77 -ffixed-line-length-none Jacobi_MPI_vectormode.F -o jacoby3D.x `
+
+To run the code 
+  
+  ` mpirun --mca btl ^openib -np 24 ./jacoby3D.x  ` 
 
