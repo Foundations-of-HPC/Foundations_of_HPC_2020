@@ -1,4 +1,4 @@
-## Day 3: HPC software stack 
+## Day 11: Messaage Passoing and MPI programming 
 
 date:  Wednesday 11/11/2020
 
