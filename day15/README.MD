@@ -15,5 +15,12 @@ It is a "simple" fortran implementation of the Jacobi solver in 3D
 
 To compile, load the MPI module and then: 
 
- ` 
+
+ ` mpif77 -ffixed-line-length-none Jacobi_MPI_vectormode.F -o jacoby3D.x `
+
+To run the code
+
+  ` mpirun --mca btl ^openib -np 24 ./jacoby3D.x  `
+
+
 
