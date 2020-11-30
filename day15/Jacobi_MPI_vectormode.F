@@ -87,7 +87,7 @@ c         pbc_check(3) = .false.
 
       if(GRID_COMM_WORLD .eq. MPI_COMM_NULL) goto 999
 
-      write(*,*),myid,GRID_COMM_WORLD, MPI_COMM_NULL
+      write(*,*)myid,GRID_COMM_WORLD, MPI_COMM_NULL
 
 C
 C     Get MPI Rank

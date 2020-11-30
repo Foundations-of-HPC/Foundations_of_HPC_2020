@@ -13,7 +13,7 @@ char **argv;
     MPI_Init( &argc, &argv );
 
     MPI_Comm_size( MPI_COMM_WORLD, &size );
-    MPI_Cart_create( MPI_COMM_WORLD, 1, &size, &false, 1, &ring_comm );
+    MPI_Cart_create( MPI_COMM_WORLD, 1, &size, &true, 1, &ring_comm );
     MPI_Cart_shift( ring_comm, 0, 1, &left_p, &right_p );
     MPI_Comm_rank( ring_comm, &rank );
     MPI_Comm_size( ring_comm, &size );

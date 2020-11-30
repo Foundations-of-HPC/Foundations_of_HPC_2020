@@ -3,7 +3,7 @@
 date: Monday 30/11/2020
 
 ### lectures
- - Stefano Cozzini : [domain decomposition with MPI](lecture07-Domain-decomposition-with-MPI.pdf)
+ - Stefano Cozzini : [domain decomposition with MPI](lecture07-Domain-Decomposition-with-MPI.pdf)
 
 
 ### references
@@ -17,7 +17,9 @@ To compile, load the MPI module and then:
 
  ` mpif77 -ffixed-line-length-none Jacobi_MPI_vectormode.F -o jacoby3D.x `
 
-To run the code 
-  
-  ` mpirun --mca btl ^openib -np 24 ./jacoby3D.x  ` 
+To run the code
+
+  ` mpirun --mca btl ^openib -np 24 ./jacoby3D.x  `
+
+
 
