@@ -93,13 +93,14 @@ int main( int argc, char **argv )
     // get the number of procs available at this place
     int nprocs  = omp_get_place_num_procs(place);
     
-    int proc_ids[nplaces];
+    int proc_ids[nprocs];
     omp_get_place_proc_ids( place, proc_ids );
     
-    // get how many places are available in the place list
+    // get how many places are available in the place list partition
     int npplaces = omp_get_partition_num_places();
 
 
+   #pragma omp barrier
    #pragma omp for ordered
     for ( int i = 0; i < nthreads; i++)
      #pragma omp ordered
