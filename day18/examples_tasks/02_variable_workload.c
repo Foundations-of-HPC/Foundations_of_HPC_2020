@@ -38,24 +38,28 @@
 #include <omp.h>
 
 
-#define FOR   0
-#define TASKS 1
+#define FOR1   0
+#define FOR2   2
+#define TASKS1 1
+#define TASKS2 1
 
 double heavy_work( int N );
 
-double myS;
-#pragma omp threadprivate(myS)
 
 
 int main( int argc, char **argv )
 {
 
-  double S1 = 0, S2 = 0;
   int nthreads;
   int N = 10000;
+  int workload = 40000;
 
   if ( argc > 1 )
-    N = atoi( *(argv+1) );
+    {
+      N = atoi( *(argv+1) );
+      if ( argc > 2 )
+	workload = atoi(*(argv+2));
+    }
   
 #pragma omp parallel
 #pragma omp master
@@ -63,46 +67,71 @@ int main( int argc, char **argv )
   
   printf("using %d threads with N = %d\n\n", nthreads, N);
   
-  double timings[2][nthreads];
+  double timings[4][nthreads];
   double min_timings[2];
+
+  //double *myresults = (double*)calloc( N*nthreads, sizeof(double));
   
   // ----------------------------------------------------- random work  
   memset( timings, 0, 2*nthreads*sizeof(double));
   memset( min_timings, 0, 2*sizeof(double));
 
- #pragma omp parallel shared(N) reduction(+:S2)
+ #pragma omp parallel shared(N, workload)
   {
     int myid   = omp_get_thread_num();
     int myseed = myid;
     double tstart, tend;
     
     srand( myseed );
-    
+
     tstart = omp_get_wtime();
-   #pragma omp for schedule(dynamic) reduction(+:S1)
+   #pragma omp for schedule(dynamic)
     for( int i = 0; i < N; i++ )
-      S1 += heavy_work( 10 + rand_r(&myseed) % 5345 );
+      //myresults[i] = heavy_work( 10 + rand_r(&myseed) % workload );
+      heavy_work( 10 + rand_r(&myseed) % workload );
 
     tend = omp_get_wtime();    
-    timings[FOR][myid] = tend - tstart;
-    
+    timings[FOR1][myid] = tend - tstart;
+
+    tstart = omp_get_wtime();
+   #pragma omp for schedule(dynamic)
+    for( int i = 0; i < N; i++ )
+      //myresults[i] = heavy_work( 10 + rand_r(&myseed) % workload );
+      heavy_work( workload - i );
+
+    tend = omp_get_wtime();    
+    timings[FOR2][myid] = tend - tstart;
+
+   #pragma omp barrier
+
+    tstart = omp_get_wtime();
+   #pragma omp single nowait
+    {
+      for ( int i = 0; i < N; i++ )
+       #pragma omp task
+	heavy_work( 10 + rand_r(&myseed) % workload );
+    }
+    tend = omp_get_wtime();    
+    timings[TASKS1][myid] = tend - tstart;
+
    #pragma omp barrier
     tstart = omp_get_wtime();
    #pragma omp single nowait
     {
       for ( int i = 0; i < N; i++ )
        #pragma omp task
-	myS+=heavy_work( 10 + rand_r(&myseed) % 5345 );
+	heavy_work( workload - i );
+      
     }
 
-    #pragma omp barrier
-    S2 = myS;
+    
     tend = omp_get_wtime();    
-    timings[TASKS][myid] = tend - tstart;
+    timings[TASKS2][myid] = tend - tstart;
+
+    
   }
 
-
-  printf("S1 = %g, S2 = %g\n", S1, S2 );
+  //free(myresults);
   
     for ( int j = 0; j < 2; j++ )
     {
@@ -114,11 +143,16 @@ int main( int argc, char **argv )
 	}
       timings[j][0] /= nthreads;
     }
-  printf("\ntimings for the random work case:\n"
-	 "\tFOR:  %9.7g  [ min: %9.7g ]\n"
-	 "\tTASKS: %9.7g  [ min: %9.7g ]\n",
-	 timings[FOR][0], min_timings[FOR],
-	 timings[TASKS][0], min_timings[TASKS] );
+  printf("\ntimings :\n"
+	 "\tFOR random       :  %9.7g  [ min: %9.7g ]\n"
+	 "\tFOR decreasing   :  %9.7g  [ min: %9.7g ]\n"
+	 "\tTASKS random     :  %9.7g  [ min: %9.7g ]\n"
+	 "\tTASKS decreasing :  %9.7g  [ min: %9.7g ]\n",
+	 
+	 timings[FOR1][0], min_timings[FOR1],
+	 timings[FOR2][0], min_timings[FOR2],
+	 timings[TASKS1][0], min_timings[TASKS1],
+	 timings[TASKS2][0], min_timings[TASKS2]);
 
   return 0;
 }
