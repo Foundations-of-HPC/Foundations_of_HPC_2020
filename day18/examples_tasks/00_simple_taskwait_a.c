@@ -76,11 +76,11 @@ int main( int argc, char **argv )
     // does something change if we comment the
     // following taskwait ?
     //
-   #pragma omp taskwait
+    //#pragma omp taskwait
     
     // what if we uncomment the following barrier ?
     //
-    //#pragma omp barrier
+   #pragma omp barrier
     
     printf(" +Hi there, finally that's me, thread %d "
 	   "at the end of the parallel region after all tasks ended\n",
