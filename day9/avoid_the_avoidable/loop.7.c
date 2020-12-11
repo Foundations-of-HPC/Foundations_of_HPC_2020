@@ -70,7 +70,7 @@ int main(int argc, char **argv)
   // allocate contiguous memory for particles coordinates
   if ( posix_memalign((void**)&parts, ALIGN, Np * 3 * sizeof(double)) != 0 )
     {
-      printf("some problem arose allocating %d bytes of %d-bits aligned memory.\n", Np * 3 * sizeof(double), ALIGN);
+      printf("some problem arose allocating %lu bytes of %d-bits aligned memory.\n", Np * 3 * sizeof(double), ALIGN);
       return 1;
     }
 

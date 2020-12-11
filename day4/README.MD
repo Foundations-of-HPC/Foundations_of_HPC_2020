@@ -1,4 +1,4 @@
-## Day 3: HPC software stack 
+## Day 4: Parallel Programming and Performance  
 
 date: Friday 16/10/2020
 

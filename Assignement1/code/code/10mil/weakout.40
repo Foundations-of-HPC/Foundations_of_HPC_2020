@@ -1,0 +1,56 @@
+
+ # walltime on processor 1 : 299.73307547 
+
+ # walltime on processor 3 : 301.85019232 
+
+ # walltime on processor 4 : 301.83809448 
+
+ # walltime on processor 2 : 301.85040519 
+
+ # walltime on processor 5 : 301.85045277 
+
+ # walltime on processor 7 : 308.16131009 
+
+ # walltime on processor 6 : 308.16140579 
+
+ # walltime on processor 8 : 308.75414735 
+
+ # walltime on processor 9 : 308.75327419 
+
+ # walltime on processor 10 : 308.74202107 
+[1605449591.169283] [ct1pg-gnode001:23520:0]       mm_posix.c:195  UCX  ERROR open(file_name=/proc/23561/fd/21 flags=0x0) failed: Permission denied
+[1605449591.169323] [ct1pg-gnode001:23520:0]         wireup.c:114  UCX  ERROR failed to send wireup: Shared memory error
+
+ # walltime on processor 12 : 308.75420745 
+
+ # walltime on processor 13 : 308.75377874 
+
+ # walltime on processor 14 : 308.75408540 
+
+ # walltime on processor 15 : 308.75393877 
+
+ # walltime on processor 16 : 308.75408771 
+
+ # walltime on processor 17 : 308.75405726 
+
+ # walltime on processor 18 : 308.75414149 
+
+ # walltime on processor 19 : 308.75369661 
+
+ # walltime on processor 20 : 308.75414064 
+
+ # walltime on processor 21 : 308.75429997 
+
+ # walltime on processor 22 : 308.75410602 
+
+ # walltime on processor 23 : 308.75429247 
+
+ # walltime on processor 24 : 308.75409644 
+
+ # walltime on processor 25 : 308.75425401 
+
+ # walltime on processor 26 : 308.75407702 
+
+ # walltime on processor 28 : 308.75406176 
+
+ # walltime on processor 30 : 308.75418487 
