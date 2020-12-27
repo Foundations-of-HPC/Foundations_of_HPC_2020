@@ -1,42 +1,135 @@
 ### Using Likwid tools on HPC cluster
 
 
-The goal of this tutorial is to show how to use likwid tools to assess performance on unitn computational nodes of some computational kernels. We will work on one single computational node.
+The goal of this tutorial is to show how to use likwid tools to assess performance ORFEO nodes of some computational kernels. We will work on one single computational node.
 
 We first submit an interactive job to the queue system
 
 ```
 
-  qsub -l walltime=1:00:00,nodes=1:ppn24 -q gpu
+  qsub -l walltime=1:00:00,nodes=1:ppn24 -q thin
   
 ```
 Load the needed module 
 
 ```
 
-  module load likwid-4.3.4
+  module load likwid-5.1.0
 
 ```
 
 As first action let us identify the topology of our node
 
 ```
+[cozzini@ct1pt-tnode006 ~]$ likwid-topology -g
+--------------------------------------------------------------------------------
+CPU name:       Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz
+CPU type:       Intel Skylake SP processor
+CPU stepping:   4
+********************************************************************************
+Hardware Thread Topology
+********************************************************************************
+Sockets:                2
+Cores per socket:       12
+Threads per core:       1
+--------------------------------------------------------------------------------
+HWThread        Thread          Core            Socket          Available
+0               0               0               0               *
+1               0               12              1               *
+2               0               1               0               *
+3               0               13              1               *
+4               0               2               0               *
+5               0               14              1               *
+6               0               3               0               *
+7               0               15              1               *
+8               0               4               0               *
+9               0               16              1               *
+10              0               5               0               *
+11              0               17              1               *
+12              0               6               0               *
+13              0               18              1               *
+14              0               7               0               *
+15              0               19              1               *
+16              0               8               0               *
+17              0               20              1               *
+18              0               9               0               *
+19              0               21              1               *
+20              0               10              0               *
+21              0               22              1               *
+22              0               11              0               *
+23              0               23              1               *
+--------------------------------------------------------------------------------
+Socket 0:               ( 0 2 4 6 8 10 12 14 16 18 20 22 )
+Socket 1:               ( 1 3 5 7 9 11 13 15 17 19 21 23 )
+--------------------------------------------------------------------------------
+********************************************************************************
+Cache Topology
+********************************************************************************
+Level:                  1
+Size:                   32 kB
+Cache groups:           ( 0 ) ( 2 ) ( 4 ) ( 6 ) ( 8 ) ( 10 ) ( 12 ) ( 14 ) ( 16 ) ( 18 ) ( 20 ) ( 22 ) ( 1 ) ( 3 ) ( 5 ) ( 7 ) ( 9 ) ( 11 ) ( 13 ) ( 15 ) ( 17 ) ( 19 ) ( 21 ) ( 23 )
+--------------------------------------------------------------------------------
+Level:                  2
+Size:                   1 MB
+Cache groups:           ( 0 ) ( 2 ) ( 4 ) ( 6 ) ( 8 ) ( 10 ) ( 12 ) ( 14 ) ( 16 ) ( 18 ) ( 20 ) ( 22 ) ( 1 ) ( 3 ) ( 5 ) ( 7 ) ( 9 ) ( 11 ) ( 13 ) ( 15 ) ( 17 ) ( 19 ) ( 21 ) ( 23 )
+--------------------------------------------------------------------------------
+Level:                  3
+Size:                   19 MB
+Cache groups:           ( 0 2 4 6 8 10 12 14 16 18 20 22 ) ( 1 3 5 7 9 11 13 15 17 19 21 23 )
+--------------------------------------------------------------------------------
+********************************************************************************
+NUMA Topology
+********************************************************************************
+NUMA domains:           2
+--------------------------------------------------------------------------------
+Domain:                 0
+Processors:             ( 0 2 4 6 8 10 12 14 16 18 20 22 )
+Distances:              10 21
+Free memory:            366033 MB
+Total memory:           385428 MB
+--------------------------------------------------------------------------------
+Domain:                 1
+Processors:             ( 1 3 5 7 9 11 13 15 17 19 21 23 )
+Distances:              21 10
+Free memory:            365110 MB
+Total memory:           387069 MB
+--------------------------------------------------------------------------------
 
-  $ likwid-topology -g
-  --------------------------------------------------------------------------------
-  CPU name:	Intel(R) Xeon(R) Gold 6140M CPU @ 2.30GHz
-  CPU type:	Intel Skylake SP processor
-  CPU stepping:	4
-  ********************************************************************************
-  Hardware Thread Topology
-  ********************************************************************************
-  Sockets:		4
-  Cores per socket:	18
-  Threads per core:	1 
-  --------------------------------------------------------------------------------
-  HWThread	Thread		Core		Socket		Available
-  0		0		0		0		 
-  rest of output omitted
+
+********************************************************************************
+Graphical Topology
+********************************************************************************
+Socket 0:
++-------------------------------------------------------------------------------------------------------------------------+
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| |   0   | |   2   | |   4   | |   6   | |   8   | |   10  | |   12  | |   14  | |   16  | |   18  | |   20  | |   22  | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +---------------------------------------------------------------------------------------------------------------------+ |
+| |                                                        19 MB                                                        | |
+| +---------------------------------------------------------------------------------------------------------------------+ |
++-------------------------------------------------------------------------------------------------------------------------+
+Socket 1:
++-------------------------------------------------------------------------------------------------------------------------+
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| |   1   | |   3   | |   5   | |   7   | |   9   | |   11  | |   13  | |   15  | |   17  | |   19  | |   21  | |   23  | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | | 32 kB | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |  1 MB | |
+| +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ +-------+ |
+| +---------------------------------------------------------------------------------------------------------------------+ |
+| |                                                        19 MB                                                        | |
+| +---------------------------------------------------------------------------------------------------------------------+ |
++-------------------------------------------------------------------------------------------------------------------------+
+[cozzini@ct1pt-tnode006 ~]$
 ```
 
 Likwid-perfctr  Measures applications' interaction with the hardware using the hardware performance counters
@@ -47,79 +140,77 @@ likwid-perfctr's performance groups are simple text files and can be easily chan
 
 To check all supported/predefined groups on a processor to stdout:
 
-::
-
- $ likwid-perfctr -a
- [exact@b21 ~]$ likwid-perfctr -a
-    BRANCH	Branch prediction miss rate/ratio
-    CACHES	Cache bandwidth in MBytes/s
-      CBOX	CBOX related data and metrics
-     CLOCK	Power and Energy consumption
-      DATA	Load to store ratio
-    ENERGY	Power and Energy consumption
- FALSE_SHARE	False sharing
-  FLOPS_AVX	Packed AVX MFlops/s
-  FLOPS_DP	Double Precision MFlops/s
-  FLOPS_SP	Single Precision MFlops/s
-    ICACHE	Instruction cache miss rate/ratio
-   L2CACHE	L2 cache miss rate/ratio
-        L2	L2 cache bandwidth in MBytes/s
-   L3CACHE	L3 cache miss rate/ratio
-        L3	L3 cache bandwidth in MBytes/s
-    MEM_DP	Power and Energy consumption
-    MEM_SP	Power and Energy consumption
-       MEM	Main memory bandwidth in MBytes/s
-      NUMA	Local and remote memory accesses
-       QPI	QPI Link Layer data
-  RECOVERY	Recovery duration
-  TLB_DATA	L1 Data TLB miss rate/ratio
- TLB_INSTR	L1 Instruction TLB miss rate/ratio
- UNCORECLOCK	All Clocks
- UOPS_EXEC	UOPs execution
- UOPS_ISSUE	UOPs issueing
- UOPS_RETIRE	UOPs retirement
- UOPS	UOPs execution info
- [exact@b21 ~]$
+```
+[cozzini@ct1pt-tnode006 ~]$ likwid-perfctr -a
+    Group name  Description
+--------------------------------------------------------------------------------
+    UOPS_ISSUE  UOPs issueing
+           MEM  Main memory bandwidth in MBytes/s
+            L2  L2 cache bandwidth in MBytes/s
+        ENERGY  Power and Energy consumption
+     TLB_INSTR  L1 Instruction TLB miss rate/ratio
+       L3CACHE  L3 cache miss rate/ratio
+        BRANCH  Branch prediction miss rate/ratio
+           TMA  Top down cycle allocation
+       L2CACHE  L2 cache miss rate/ratio
+     UOPS_EXEC  UOPs execution
+        MEM_SP  Overview of arithmetic and main memory performance
+      FLOPS_SP  Single Precision MFLOP/s
+      FLOPS_DP  Double Precision MFLOP/s
+CYCLE_ACTIVITY  Cycle Activities
+        DIVIDE  Divide unit information
+      TLB_DATA  L2 data TLB miss rate/ratio
+           UPI  UPI data traffic
+          DATA  Load to store ratio
+         CLOCK  Power and Energy consumption
+     FLOPS_AVX  Packed AVX MFLOP/s
+        MEM_DP  Overview of arithmetic and main memory performance
+        CACHES  Cache bandwidth in MBytes/s
+  CYCLE_STALLS  Cycle Activities (Stalls)
+   UOPS_RETIRE  UOPs retirement
+            L3  L3 cache bandwidth in MBytes/s
+[cozzini@ct1pt-tnode006 ~]$
+```
 
 To get a list with all supported counter registers and events, call:
 
-::
+```
 
  $ likwid-perfctr -e | less
 
+```
 
 To get a list with all supported events and corresponding counter registers that match a string (case insensitive), call:
 
-::
+```
 
   $ likwid-perfctr -E <string>
 
+```
+
 A help text explaining a specific event group can be requested with -H together with the -g switch:
 
-::
-
+```
   $ likwid-perfctr -H -g MEM
 
+```
 This prints the text below LONG in the performance group file. 
 
 To use likwid-perfctr for a serial application execute:
 
-::
+```
 
   $ likwid-perfctr  -C S0:1  -g BRANCH  ./a.out
 
+```
 
 We can now use it on a shared openMP application: as an example we use stream application compiled
-with intel compiler in the following way: 
-
-::
-
- icc -Ofast -xHost -qopenmp -fno-alias -nolib-inline  -o stream.exe stream.c
+as discussed in the stream exercise.
 
 And here is the result we obtained, specifying as performance group flops in double precision:
 
 
-::
+```
 
  [exact@b22 stream]$  env OMP_NUM_THREADS=4 likwid-perfctr -C N:0-3  -g FLOPS_DP ./stream.exe
  --------------------------------------------------------------------------------
@@ -210,6 +301,7 @@ And here is the result we obtained, specifying as performance group flops in dou
  |  Vectorization ratio STAT |   399.9998 |      99.9998 |       100 |   99.9999 |
  +---------------------------+------------+--------------+-----------+-----------+
 
+```
 
 Results give us some interesting things to look at:
 
@@ -219,13 +311,15 @@ We can now use the API...
 Let us use again a modified stream version, instrumented appropriately.
  Here the way we can compile the application:
 
-::
+```
 
   icc -Ofast -xHost -qopenmp -fno-alias -nolib-inline -I/apps/likwid-4.3.4/include/ -DLIKWID_PERFMON stream-mapi.c -o stream-mapi.exe -L/apps/likwid-4.3.4/lib/ -llikwid
-  
+
+```
+
 And we can now run it in the following way: 
 
-::
+```
 
  [exact@b21 likwid]$ export OMP_NUM_THREADS=4 ; likwid-perfctr -C N:0-3 -m -g FLOPS_DP -f ./stream-mapi.exe
  --------------------------------------------------------------------------------
@@ -469,10 +563,10 @@ And we can now run it in the following way:
  +---------------------------+------------+-----------+-----------+-----------+
 
 
+
+
+```
+
 We have now the four distinct region we instrumented and for each of them we can check the specific performance results.
 
-Exercises:
-----------
-
-Run likwid  on avx code and matmul code using different metric and compare results with stream one.  
 
