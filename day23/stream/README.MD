@@ -83,6 +83,16 @@ Performance are now in the order of 64% of peak performance.
 
 #### section two: understand the cost of wrong allocation
 
+In this section we will execute STREAM on just the cores of on single socket. 
+With the following line we loop over 12 threads. 
+We use `numactl` to bind the process to socket `0` and local memory `0`.
+
+```
+(for i in `seq 1 12`; do OMP_NUM_THREADS=$i numactl --cpunodebind 0 --membind 0 ./stream; done) | grep "Triad:" | awk '{print $2}'
+```
+
+Now we force the process to use distant memory, simply correcting `--membind 1`.
+
 
 
 ### References
