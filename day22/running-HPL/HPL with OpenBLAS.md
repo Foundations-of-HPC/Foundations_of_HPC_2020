@@ -10,13 +10,16 @@ Get the package and unpack it in some location on your home directory, then crea
 
     wget https://github.com/xianyi/OpenBLAS/releases/download/v0.3.13/OpenBLAS-0.3.13.tar.gz
     tar -xvzf OpenBLAS-0.3.13.tar.gz
-    cd OpenBLAS-0.3.13.tar.gz
+    cd OpenBLAS-0.3.13
 	mkdir ../openblas-0.3.13
 
-Now get a node on the cluster and compile the library with the appropriate `TARGET` CPU, in our case `SKYLAKEX`. 
-We also define the variable `PREFIX` with the absolute path of the install dir we have just created:
+Now get a node on the cluster and reutrn in the OpenBLAS-0.3.13 folder.
+We compile the library with the appropriate `TARGET` CPU, in our case `SKYLAKEX`. 
+We then install the library passing the variable `PREFIX` with the absolute path of the install folder we have just created:
 
-    make TARGET=SKYLAKEX PREFIX=/u/dssc/$STUDENT/openblas-0.3.13
+    cd ~/OpenBLAS-0.3.13
+    make TARGET=SKYLAKEX 
+    make PREFIX=/u/dssc/$STUDENT/openblas-0.3.13 install
 	cd
     
 ## Link OpenBLAS to HPL
@@ -37,8 +40,7 @@ We now edit Make.OpenBLAS:
     
 3. Now we change the `LAlib` variable accordingly:
 
-
-    LAlib         = $(LAdir)/lib/libopenblas.a
+        LAlib         = $(LAdir)/lib/libopenblas.a
     
 Now we load the appriopriate module and compile the HPL benchmark:
 
