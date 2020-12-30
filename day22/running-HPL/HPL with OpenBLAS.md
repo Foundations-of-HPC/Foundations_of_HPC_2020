@@ -1,4 +1,4 @@
-#OpenBLAS library
+# OpenBLAS library
 
 OpenBLAS is an optimized Basic Linear Algebra Subprograms (BLAS) library based on GotoBLAS2 1.13 BSD version.
 
@@ -13,7 +13,7 @@ Get the package and unpack it in some location on your home directory, then crea
     cd OpenBLAS-0.3.13.tar.gz
 	mkdir ../openblas-0.3.13
 
-Now get a node on the cluster and compile the library with the appropriate target CPU, in our case SKYLAKEX. 
+Now get a node on the cluster and compile the library with the appropriate `TARGET` CPU, in our case `SKYLAKEX`. 
 We also define the variable `PREFIX` with the absolute path of the install dir we have just created:
 
     make TARGET=SKYLAKEX PREFIX=/u/dssc/$STUDENT/openblas-0.3.13
