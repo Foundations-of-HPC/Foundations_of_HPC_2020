@@ -9,7 +9,6 @@ The first code ``gemm.c`` is a standard *gemm* code, where 3 matrices A,B,C are 
 The relevant call is 
 
 ```
-
   GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha, A, m, B, k, beta, C, m);
 
 ```
@@ -28,7 +27,6 @@ The first argument ``Order`` specifies wheter we are using column major storage 
 ``TransA`` and ``TransB`` tell that the matrices should be taken as they are, so not transposed. The rest are the standard GEMM arguments, to perform the operation
 
 ```
- 
   C(M,N) = alpha*A(M,K)*B(K,N) + beta*C(K,N)
 ```
 
@@ -38,19 +36,27 @@ To compile and run the code, first submit an interactive job to the queue system
 
 On ORFEO: 
 ```
-
   qsub -q gpu -l walltime=2:00:00 -l nodes=1:ppn=24 -I
 
-
+```
 Load the needed module 
 
 ```
-
   module load intel
 
 ```  
 
-And type 
+In ``Makefile``  modify variable OPENBLASROOT with your installation path to OpenBLAS :
+```  
+OPENBLASROOT=/path_to_OpenBlas
+```  
+and set the desired compilation flag (``-DUSE_FLOAT`` / ``-DUSE_DOUBLE``).
+
+Compilation requires including the OpenBLAS library:
+```  
+export LD_LIBRARY_PATH=/path_to_OpenBlas:$LD_LIBRARY_PATH
+```  
+Type 
 
 ```
   make cpu
@@ -59,8 +65,8 @@ And type
 To run the code simply issue
 
 ```
-
-  ./gemm.x 
+  ./gemm_mkl.x 
+  ./gemm_oblas.x
 
 ```
 
@@ -69,7 +75,6 @@ With no argument it will calculate a matrix multiplication with M=2000 K=200 and
 You can use positional argument to specify the size
 
 ```
-
   ./gemm.x 2000 1000 3000 
 
 ```
@@ -79,7 +84,6 @@ will use M=2000 K=1000 and N=3000, so we will get C(2000,3000) = A(2000,1000)\*B
 The present BLAS code is based on Intel MKL implementation, which is multithreaded. To control the number of threads you could use the environment variable ``OMP_NUM_THREADS``
 
 ```
-
   export OMP_NUM_THREADS=4
 ```
 
