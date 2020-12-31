@@ -228,7 +228,21 @@ void * generate_gradient( int maxval, int xsize, int ysize )
   return ptr;
 }
 
-
+void blur( void *image, int xsize, int ysize, int maxval, int Ktype ){
+ int i;
+ int j;
+ printf("blur %d %d %d %d\n",  xsize, ysize, maxval, Ktype);
+for (i=0; i < xsize; i++)
+{ for (j=0; j< ysize; j++)
+ {
+  printf("il blur di image è %hu\n", ((unsigned short int*)image)[i*ysize+j]);
+// printf("il blur di image è %hu\n", ((unsigned short int*)image)[(i-1)*ysize+j]);
+// printf("il blur di image è %hu\n", ((unsigned short int*)image)[i*ysize+j+1]);
+// printf("il blur di image è %hu\n", ((unsigned short int*)image)[(i+1)*ysize+j]);
+// printf("il blur di image è %hu\n", ((unsigned short int*)image)[i*ysize+j-1]);
+}
+}
+}
 
 
 int main( int argc, char **argv ) 
@@ -236,7 +250,7 @@ int main( int argc, char **argv )
     int xsize      = XWIDTH;
     int ysize      = YWIDTH;
     int maxval     = MAXVAL;
-
+    int Kerneltype = 0;
     // print information about endianism
     printf("this machine is %s\n", (I_M_LITTLE_ENDIAN)?"little endian":"big endian");
 
@@ -288,7 +302,7 @@ int main( int argc, char **argv )
     // do something on the image (for instance, blur it)
     // ...
     //
-    
+    blur( ptr, xsize, ysize, maxval, Kerneltype );
     // swap the endianism
     //
     if ( I_M_LITTLE_ENDIAN )
