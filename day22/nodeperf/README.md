@@ -1,4 +1,3 @@
-
 ## Exercise 2: compile and run nodeperf.c program 
 
 Taken from reference 2: Optimizing HPC application with Intel Cluster tools 
@@ -26,22 +25,6 @@ $ export OMP_PLACES=cores
 ```
 
 where XX is the number of core you have on your system.
-Report the performance you get on ulysses node and compare with Peak performance of the node.
-
-### part 2: try to compile nodeperf using gcc and/or pgi compiler on C3E infrastructure
-
-Unfortunately on C3E infrastructure intel compiler is not available.
-Try to compile the program on such infrastructure using gcc and/or pgi compiler.
-
-This line should  produce the executable 
-```
-mpicc -fopenmp -o3 nodeperf.c  -m64 -I${MKLROOT}/include -o nodeperf.x -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
-```
-
-but it does not seems to work..
-Why ? 
-
-hints: take a look at the code and to the imalloc routine..
-
+Report the performance you get on ORFEO node and compare with Peak performance of the node using the whole node and just a single core.
 
 
