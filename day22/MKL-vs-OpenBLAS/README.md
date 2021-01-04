@@ -43,7 +43,17 @@ Load the needed module
   module load intel
 ```  
 
-And type 
+In ``Makefile``  modify variable OPENBLASROOT with your installation path to OpenBLAS :
+```  
+OPENBLASROOT=/path_to_OpenBlas
+```  
+and set the desired compilation flag (``-DUSE_FLOAT`` / ``-DUSE_DOUBLE``).
+
+Compilation requires including the OpenBLAS library:
+```  
+export LD_LIBRARY_PATH=/path_to_OpenBlas:$LD_LIBRARY_PATH
+```  
+Type 
 
 ```
 make cpu
@@ -54,7 +64,9 @@ Compilation will make use of the Intel MKL implementation, which is multithreade
 To run the code simply issue
 
 ```
-  ./gemm.x 
+  ./gemm_mkl.x 
+  ./gemm_oblas.x
+
 ```
 
 With no argument it will calculate a matrix multiplication with M=2000 K=200 and N=1000 with OMP_NUM_THREADS set to number of processor you choose when you submit the the job ( 24 in this case)
