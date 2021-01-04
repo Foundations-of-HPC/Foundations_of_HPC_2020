@@ -1,4 +1,3 @@
-
 # HPL benchmark using MKL multithread library
 
 The aim of this exercise is to compile the hpl benchmark against the mkl libraries and to tune it in order to get close to the theoretical peak performance of a node of the Ulysses cluster.
@@ -84,7 +83,7 @@ We now edit such file and change a few things:
  Here below a possibile solution for a Linux O.S. with a multithread library using a gnu compiler is reported:
  
 ``` 
- LAlib        = -L${MKLROOT}/lib/intel64 -lmkl_rt -lpthread -lm -ldl
+ LAlib        =  -L${MKLROOT}/lib/intel64 -lmkl_rt -lpthread -lm -ldl
 ```
 
 5. We finally define the compiler and the linker replacing the original value with the mpicc wrapper made available by the mpi module once loaded.
@@ -105,7 +104,7 @@ Done this we can start compiling after loading the appropriate modules:
 For the ORFEO cluster we need to do the following: 
 
 ```
- module load intel/20.4 
+ module load intel/20.1 
  make arch=Linux_Intel64 
 ```
 
@@ -115,7 +114,7 @@ We are now ready to play with it.
 
 ## Things  to do:
 
-1.Run on 20 core as 20 mpi processes the xhpl program and finds out the right combination
+1.Get a GPU node and run 48 core as 48 mpi processes the xhpl program and finds out the right combination
 in term of N(size of the problem)  Nb (block size)  P and Q  (grid of the MPI processes) 
 that allows you to get at least 75% of peak performance..
 For an initial guess of them here a simple online calculator:
@@ -175,15 +174,15 @@ Once identify the executable try to run it with the best combination you obtaine
 
   MPI processes | Threads
   --- | --- 
- 20 | 1
- 10 | 2 
- 5  | 4 
- 4  | 5 
- 2  | 10
- 1  | 20 
+ 48 | 1
+ 24 | 2 
+ 12 | 4 
+ 6  | 8 
+ 2  | 24
+ 1  | 48 
 
 5.Collect numbers you obtained, plot (if needed) them and prepare a short report comparing peak performance against the performance you obtained. 
 
-6.(optional): Try to run the benchmark using more than one nodes (i.e. 40 cores on two nodes) and see which kind of performance are you able to obtain. Comment the result you obtained..
+6.(optional): Try to run the benchmark using more than one nodes (i.e. 96 cores on two nodes) and see which kind of performance are you able to obtain. Comment the result you obtained..
 
   Hints: on a larger number of processors you have to enlarge N (size of the problem) and P&Q  while you may keep Nb costant...
