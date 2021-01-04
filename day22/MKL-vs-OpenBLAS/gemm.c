@@ -105,7 +105,7 @@ int main(int argc, char** argv)
     GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans,
                 m, n, k, alpha, A, m, B, k, beta, C, m);
     clock_gettime(CLOCK_MONOTONIC, &end);
-    elapsed = (double)(diff(begin,end).tv_sec + (double)(diff(begin,end).tv_nsec / 100000000));
+    elapsed = (double)diff(begin,end).tv_sec + (double)diff(begin,end).tv_nsec / 1000000000.0;
     double gflops = 2.0 * m *n*k;
     gflops = gflops/elapsed*1.0e-9; 
     printf ("\n Elapsed time %d.%d s\n\n\n", diff(begin,end).tv_sec, diff(begin,end).tv_nsec );
