@@ -45,14 +45,10 @@ Load the needed module
 
 In ``Makefile``  modify variable OPENBLASROOT with your installation path to OpenBLAS :
 ```  
-OPENBLASROOT=/path_to_OpenBlas
+OPENBLASROOT=/path_to_OpenBLAS
 ```  
 and set the desired compilation flag (``-DUSE_FLOAT`` / ``-DUSE_DOUBLE``).
 
-Compilation requires including the OpenBLAS library:
-```  
-export LD_LIBRARY_PATH=/path_to_OpenBlas:$LD_LIBRARY_PATH
-```  
 Type 
 
 ```
@@ -89,7 +85,10 @@ We can now download, compile and used OpenBLAS library to compare performance ag
 First get the library and the unpack it: 
 
 ``` 
-wget 
+wget https://github.com/xianyi/OpenBLAS/releases/download/v0.3.13/OpenBLAS-0.3.13.tar.gz
+tar -xvzf OpenBLAS-0.3.13.tar.gz
+cd OpenBLAS-0.3.13
+
 ``` 
 
 Compilation is straighforward according to the info provided  [here](https://github.com/xianyi/OpenBLAS/wiki/User-Manual#compile-the-library)
@@ -98,10 +97,9 @@ We just need to do this on the computational node and to load the appropriate gn
 
 ``` 
 module load gnu
-make
-
+make GCC=gcc FC=gfortran TARGET=SKYLAKEX
+make PREFIX=/u/dssc/$STUDENT/OpenBLASs-0.3.13 install
 ```
-
 This should be enough: architecture shoud be recognized automatically (as skylakex) and so AVX512 SIMD vector will be used.
 At the end of compilation you should see something like that:
 
@@ -116,6 +114,10 @@ At the end of compilation you should see something like that:
   Library Name     ... libopenblas_skylakexp-r0.3.13.a (Multi-threading; Max num-threads is 24)
 
 ```
+Include the OpenBLAS library:
+```  
+export LD_LIBRARY_PATH=/path_to_OpenBlas:$LD_LIBRARY_PATH
+```  
 
 #### Proposed Exercise
 
@@ -130,3 +132,7 @@ At the end of compilation you should see something like that:
 For further information please visit the official openBLAS page:
 
   - http://www.openblas.net/
+
+#### Results
+
+![MKL_vs_oBLAS](/uploads/7278b8074155d3898c10315f34ecd746/MKL_vs_oBLAS.png)
