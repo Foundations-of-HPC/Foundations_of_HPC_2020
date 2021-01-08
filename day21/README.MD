@@ -1,4 +1,4 @@
-## Day 19:   MPI libraries  
+## Day 21:   MPI libraries  
 
 date: Friday 18/12/2020
 
@@ -9,6 +9,6 @@ date: Friday 18/12/2020
  - chapter 10 of reference 4: final section contains interesting stuff. 
 
 ### tutorial
- - Benchmarking-Network=Performance
+ - Benchmarking-Network-Performance
 
  
