@@ -8,7 +8,8 @@ date: Monday 21/12/2020
 
 ### references
  - www.netlib.org 
- -  
+ 
+ 
 ### tutorials/exercise
   - compiling and running HPL on ORFEO
   - comparing MKL against OpenBLAS libraries 
