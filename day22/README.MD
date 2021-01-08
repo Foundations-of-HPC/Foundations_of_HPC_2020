@@ -13,3 +13,4 @@ date: Monday 21/12/2020
 ### tutorials/exercise
   - compiling and running HPL on ORFEO
   - comparing MKL against OpenBLAS libraries 
+  - compiling and using nodeperf

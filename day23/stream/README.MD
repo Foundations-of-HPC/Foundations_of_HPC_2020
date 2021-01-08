@@ -94,6 +94,18 @@ We use `numactl` to bind the process to socket `0` and local memory `0`.
 Now we force the process to use distant memory, simply correcting `--membind 1`.
 
 
+```
+(for i in `seq 1 12`; do OMP_NUM_THREADS=$i numactl --cpunodebind 0 --membind 1 ./stream; done) | grep "Triad:" | awk '{print $2}'
+```
+
+Performance numbers can be different.
+
+#### proposed exercise 
+
+ - create a plot for ORFEO nodes and check if the difference in performance is simmetric: i.e. bind core on socket 0 and memory on socket 1 you obtain the same performance as binding cores on socket 1 and memory on socket 0. 
+
+ -play with different binding schema to appreciate performance difference
+
 
 ### References
 
