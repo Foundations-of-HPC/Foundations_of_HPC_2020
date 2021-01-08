@@ -88,18 +88,17 @@ For submitting 3 *successful* assignments in the due time before the end of the 
 | Fri, Nov 13 | [12] [Again on MPI programming](day12/README.MD)                                                  | [4] Exercises on MPI                                 |                   |
 | Wed, Nov 18 | [13] OpenMP / 1                                              |                                                      |                                                      |
 | Fri, Nov 20 | [14] OpenMP / 2                                              | [5] Exercises on OpenMP                              |                   |
-| Wed, Nov 25 | [15] MPI / 3                                                 |                                                      |                                                      |
-| Fri, Nov 27 | [16] MPI / 4                                                 | [6] Exercises on MPI                                 |                                                      |
+| Mon, Nov 30 | [15] [domain decomposition with MPI](day15/README.MD)                                                 |                                                      |                                                      |
+| Mon, Dec 7  | [16] [Network Hardware and Performance Model](day16/README.MD)                          |                                  |                                                      |
 | Wed, Dec 2  | [17] OpenMP / 3                                              |                                                      |                                                      |
 | Fri, Dec 4  | [18] OpenMP / 4                                              | [7] Exercises on OpenMP                              |                                                      |
-| Wed, Dec 9  | [19] MPI / 5                                                 |                                                      |                                                      |
-| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(3 weeks)*  |
-| Wed, Dec 16 | [21] Parallel HPC libraries / 1                              |                                                      |                                                      |
-| Fri, Dec 18 | [22] Parallel HPC libraries / 2 + benchmarking               | [9] Exercises on benchmarking HPC parallel libraries |                         |
-| Fri, Jan 8  | [23] Parallel Storage / 2                                    |                                                      |                                                      |
-| Wed, Jan 13 | [24] Parallel Storage / 2                                    |                                                      |                                                      |
-| Fri, Jan 15 | [25] roof model + parallel performance analysis              | [10] Exercises                                       | |
-| Wed, Jan 20 | [26] TBD - advanced materials                                |                                                      |                                                      |
+| Wed, Dec 9  | [19] [Performance Model and  a short tutorial on measuring MPI performance on ORFEO nodes](day19/README.MD)                                                |                                                      |                                                      |
+| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(3 weeks)*  |                                                      |
+| Fri, Dec 18 | [21] [MPI libraries](day21/README.MD) [22] [Parallel HPC libraries](day22/README.MD)               | [9] Exercises on High Performance Libraries |                         |
+| Fri, Jan 8  | [23] [Benchmarking HPC systems](day23/README.MD)             |  Exercises on benchmarking                                                    |                                                      |
+| Wed, Jan 13 | [24] [Parallel Storage](day24/README.MD)                                  |                                                   |                                                      |
+| Fri, Jan 15 | [25] [Intro to GPU programming](day25/README.MD)             | [10] Exercises on parallel storage                                       | |
+| Mon, Jan 18 | [26]  roof model + parallel performance analysis                                |                                                      |                                                      |
 | Fri, Jan 22 | [27] TBD - advanced materials                                |                                                      |                                                      |
 | Wed, Jan 27 | [28] TBD - advanced materials                                |                                                      |                                                      |
 | Fri, Jan 29 | [29] TBD - advanced materials                                |                                                      |                                                      |
