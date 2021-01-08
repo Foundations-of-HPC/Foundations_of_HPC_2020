@@ -59,13 +59,13 @@ Antonio Ragagnin:  antonio.ragagnin@inaf.it
 
 The final grade of the exam will be the result of a written and an oral examination.
 
-During the course, the students will be asked to carry out 7 assignments. It will be required to submit the code developed and the results written in a given format (so to allow automatic checking) on a repo that we will indicate. Each assignment will have a due date of either 1 or 2 weeks. 
+During the course, the students have been asked to carry out 3 assignments. It will be required to submit the code developed and the results written in a given format (so to allow automatic checking) on a repo that we will indicate. Each assignment will have a due date of either 1 or 2 weeks. 
 
-If the first 5 assignments will have been submitted and will be successful, the student will be directly admitted to a final oral examination. The oral examination will focus on the topics covered in the lessons, and it will start from the examination of some of the assignments.
+If the two assignments  have been submitted and will be successful, the student will be directly admitted to a final oral examination. The oral examination will focus on the topics covered in the lessons, and it will start from the examination of some of the assignments.
 
-If the either the first 5 assignments will not have been submitted, or they are not successful, a written exam will be required. This test will consist in a project that must be submitted at least 1 week before taking the oral examination.
+If the either the two assignments will not have been submitted, or they are not successful, a written exam will be required. This test will consist in a project that must be submitted at least 1 week before taking the oral examination.
 
-For submitting 7 *successful* assignments in the due time before the end of the course, a +1 will be rewarded in the final mark.
+For submitting 3 *successful* assignments in the due time before the end of the course, a +1 will be rewarded in the final mark.
 
 
 
@@ -74,32 +74,31 @@ For submitting 7 *successful* assignments in the due time before the end of the 
 
 | DATE        | LECTURES                                                     | TUTORIALS                                            | ASSIGMENTS                                           |
 | :---------- | :----------------------------------------------------------- | :--------------------------------------------------- | :--------------------------------------------------- |
-| Wed, Oct 7  | [1] Introduction to course/ introduction to HPC              |                                                      |                                                      |
-| Fri, Oct 9  | [2] Introduction to HPC* / 2                                 |                                                      |                                                      |
-| Wed, Oct 14 | [3] HPC Hardware and parallel computing                      |                                                      |                                                      |
-| Fri, Oct 16 | [4] HPC Software stack and tools                             | [1] Using an HPC infrastructure                      | [1] Assigment on introductory topics  *(1 week)*     |
+| Wed, Oct 7  | [1] [Introduction to course/ introduction to HPC](day01/README.MD)              |                                                      |                                                      |
+| Fri, Oct 9  | [2] [Introduction to HPC: part 2](day02/README.MD)                                 |                                                      |                                                      |
+| Wed, Oct 14 | [3] [HPC Hardware and parallel computing](day03/README.MD)                      |                                                      |                                                      |
+| Fri, Oct 16 | [4] [HPC Software stack and tools](day04/README.MD)                             | [1] Using an HPC infrastructure                      | [1] Assigment on introductory topics  *(1 week)*     |
 | Wed, Oct 21 | [5] Single Core Optimization (SCO) / 1<br />*Modern Architecture + Opt. Intro + Stack & Heap + Memory allocation* |                                                      |                                                      |
 | Fri, Oct 23 | [6] SCO / 2<br />*How to use the Compiler + Cache hierarchy* | [2] Exercises on SCO                                 |                                                      |
 | Wed, Oct 28 | [7] SCO / 3<br />*loops*                                     |                                                      |                                                      |
 | Fri, Oct 30 | [8] SCO / 4<br />*Pipelines +branch predictions*             | [3] Tools for profiling                              |                                                      |
 | Wed, Nov 4  | [9] SCO / 5<br />*Prefetching + vectorization*               |                                                      |                                                      |
 | Fri, Nov 6  | [10] SCO / 6<br />*Debugging*                                | [4] Exercises on SCO                                 |                                                      |
-| Wed, Nov 11 | [11] MPI / 1                                                 |                                                      |                                                      |
-| Fri, Nov 13 | [12] MPI / 2                                                 | [4] Exercises on MPI                                 | [2] Assigment on MPI  *(1 week)*                     |
+| Wed, Nov 11 | [11] [Message Passing and intro to MPI programming](day11/README.MD)                                                 |                                                      |                                                      |
+| Fri, Nov 13 | [12] [Again on MPI programming](day12/README.MD)                                                  | [4] Exercises on MPI                                 |                   |
 | Wed, Nov 18 | [13] OpenMP / 1                                              |                                                      |                                                      |
-| Fri, Nov 20 | [14] OpenMP / 2                                              | [5] Exercises on OpenMP                              | [3] Assigment on OpenMP  *(1 week)*                  |
-| Wed, Nov 25 | [15] MPI / 3                                                 |                                                      |                                                      |
-| Fri, Nov 27 | [16] MPI / 4                                                 | [6] Exercises on MPI                                 |                                                      |
+| Fri, Nov 20 | [14] OpenMP / 2                                              | [5] Exercises on OpenMP                              |                   |
+| Mon, Nov 30 | [15] [domain decomposition with MPI](day15/README.MD)                                                 |                                                      |                                                      |
+| Mon, Dec 7  | [16] [Network Hardware and Performance Model](day16/README.MD)                          |                                  |                                                      |
 | Wed, Dec 2  | [17] OpenMP / 3                                              |                                                      |                                                      |
 | Fri, Dec 4  | [18] OpenMP / 4                                              | [7] Exercises on OpenMP                              |                                                      |
-| Wed, Dec 9  | [19] MPI / 5                                                 |                                                      |                                                      |
-| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(3 weeks)*  |
-| Wed, Dec 16 | [21] Parallel HPC libraries / 1                              |                                                      |                                                      |
-| Fri, Dec 18 | [22] Parallel HPC libraries / 2 + benchmarking               | [9] Exercises on benchmarking HPC parallel libraries | [6] Assignment on Parallel HPC libraries  *(1 week)* |
-| Fri, Jan 8  | [23] Parallel Storage / 2                                    |                                                      |                                                      |
-| Wed, Jan 13 | [24] Parallel Storage / 2                                    |                                                      |                                                      |
-| Fri, Jan 15 | [25] roof model + parallel performance analysis              | [10] Exercises                                       | [7] Assignment on Parallel Storage  *(1 week)*       |
-| Wed, Jan 20 | [26] TBD - advanced materials                                |                                                      |                                                      |
+| Wed, Dec 9  | [19] [Performance Model and  a short tutorial on measuring MPI performance on ORFEO nodes](day19/README.MD)                                                |                                                      |                                                      |
+| Fri, Dec 11 | [20] OpenMP / 5                                              | [8] Exercises on MPI and OpenMP                      | [4] + [5] Assigments on MPI and OpenMP  *(3 weeks)*  |                                                      |
+| Fri, Dec 18 | [21] [MPI libraries](day21/README.MD) [22] [Parallel HPC libraries](day22/README.MD)               | [9] Exercises on High Performance Libraries |                         |
+| Fri, Jan 8  | [23] [Benchmarking HPC systems](day23/README.MD)             |  Exercises on benchmarking                                                    |                                                      |
+| Wed, Jan 13 | [24] [Parallel Storage](day24/README.MD)                                  |                                                   |                                                      |
+| Fri, Jan 15 | [25] [Intro to GPU programming](day25/README.MD)             | [10] Exercises on parallel storage                                       | |
+| Mon, Jan 18 | [26]  roof model + parallel performance analysis                                |                                                      |                                                      |
 | Fri, Jan 22 | [27] TBD - advanced materials                                |                                                      |                                                      |
 | Wed, Jan 27 | [28] TBD - advanced materials                                |                                                      |                                                      |
 | Fri, Jan 29 | [29] TBD - advanced materials                                |                                                      |                                                      |

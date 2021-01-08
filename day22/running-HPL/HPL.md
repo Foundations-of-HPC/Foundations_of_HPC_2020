@@ -19,7 +19,7 @@ Take a look at the INSTALL file in the top dir:
 >less INSTALL
 ==============================================================
  High Performance Computing Linpack Benchmark (HPL)
- HPL - 2.2 - February 24, 2016
+ HPL - 2.3 - December 2, 2018
 ==============================================================
 
  1) Retrieve the tar file, then
@@ -56,7 +56,7 @@ As reported in the above file we have first to create a Make.Something file in t
 We can start by copying one example from the setup directory:
 
 ```
-  >cp setup/Make.Linux_PII Make.ulysses-mkl
+  >cp setup/Make.Linux_Intel64 .
 ```
 
 We now edit such file and change a few things:
@@ -64,7 +64,7 @@ We now edit such file and change a few things:
 1. We define appropriately the TOPDIR variable: `TOPdir       = $(HOME)/hpl`
    We need to set it to the dir where we are, for instance in our case:
    
-   ```TOPdir       = $(HOME)/opt/hpl-2.3```
+   ```TOPdir       = $(HOME)/hpl-2.3```
    
 2. We comment out the MPI variable becouse we will use the the mpi wrapper compiler (see later)
 
@@ -83,12 +83,7 @@ We now edit such file and change a few things:
  Here below a possibile solution for a Linux O.S. with a multithread library using a gnu compiler is reported:
  
 ``` 
- LAlib        = -L$(LAdir)/lib/intel64 \
-               -Wl,--start-group \
-               $(LAdir)/lib/intel64/libmkl_intel_lp64.a \
-               $(LAdir)/lib/intel64/libmkl_gnu_thread.a \
-               $(LAdir)/lib/intel64/libmkl_core.a \
-               -Wl,--end-group -lgomp -lpthread -lm -ldl
+ LAlib        =  -L${MKLROOT}/lib/intel64 -lmkl_rt -lpthread -lm -ldl
 ```
 
 5. We finally define the compiler and the linker replacing the original value with the mpicc wrapper made available by the mpi module once loaded.
@@ -106,21 +101,20 @@ LINKER       = mpicc
 ```
 
 Done this we can start compiling after loading the appropriate modules: 
-For the C3HPC cluster we need to do the following: 
+For the ORFEO cluster we need to do the following: 
 
 ```
- module load mkl 
- module load openmpi/3.1.2/gnu/7.2.0
- make arch=mkl 
+ module load intel/20.1 
+ make arch=Linux_Intel64 
 ```
 
-And finally we will find the executable in ` TOPDIR/bin/mkl/` 
+And finally we will find the executable in ` TOPDIR/bin/Linux_Intel64/` 
 We are now ready to play with it.
     
 
 ## Things  to do:
 
-1.Run on 20 core as 20 mpi processes the xhpl program and finds out the right combination
+1.Get a GPU node and run 48 core as 48 mpi processes the xhpl program and finds out the right combination
 in term of N(size of the problem)  Nb (block size)  P and Q  (grid of the MPI processes) 
 that allows you to get at least 75% of peak performance..
 For an initial guess of them here a simple online calculator:
@@ -180,18 +174,15 @@ Once identify the executable try to run it with the best combination you obtaine
 
   MPI processes | Threads
   --- | --- 
- 20 | 1
- 10 | 2 
- 5  | 4 
- 4  | 5 
- 2  | 10
- 1  | 20 
+ 48 | 1
+ 24 | 2 
+ 12 | 4 
+ 6  | 8 
+ 2  | 24
+ 1  | 48 
 
 5.Collect numbers you obtained, plot (if needed) them and prepare a short report comparing peak performance against the performance you obtained. 
 
-6.(optional): Try to run the benchmark using more than one nodes (i.e. 40 cores on two nodes) and see which kind of performance are you able to obtain. Comment the result you obtained..
+6.(optional): Try to run the benchmark using more than one nodes (i.e. 96 cores on two nodes) and see which kind of performance are you able to obtain. Comment the result you obtained..
 
-  Hints: on a larger number of processors you have to enlarge N (size of the problem) and P&Q  while you may keep Nb costant... 
-
-
- 
+  Hints: on a larger number of processors you have to enlarge N (size of the problem) and P&Q  while you may keep Nb costant...

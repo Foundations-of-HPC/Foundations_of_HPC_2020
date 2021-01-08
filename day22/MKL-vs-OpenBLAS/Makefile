@@ -11,10 +11,10 @@ cpu: gemm_mkl.x gemm_oblas.x
 
 
 gemm_mkl.x: gemm.c
-	gcc -DUSE_FLOAT -DMKL $^ -m64 -I${MKLROOT}/include $(MKL)  -o $@
+	gcc -DUSE_DOUBLE -DMKL $^ -m64 -I${MKLROOT}/include $(MKL)  -o $@
 
 gemm_oblas.x: gemm.c
-	gcc -DUSE_FLOAT -DOPENBLAS $^ -m64 -I${OPENBLASROOT} -L/${OPENBLASROOT} -lopenblas -lpthread -o $@
+	gcc -DUSE_DOUBLE -DOPENBLAS $^ -m64 -I${OPENBLASROOT} -L/${OPENBLASROOT} -lopenblas -lpthread -o $@
 
 clean:
 	rm -rf *.x

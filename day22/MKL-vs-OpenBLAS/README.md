@@ -9,14 +9,11 @@ The first code ``gemm.c`` is a standard *gemm* code, where 3 matrices A,B,C are 
 The relevant call is 
 
 ```
-
   GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha, A, m, B, k, beta, C, m);
-
 ```
 where ``GEMMCPU`` is a macro to easily switch from single precision (``cblas_sgemm``) to double precision (``cblas_dgemm``).
 
 The standard cblas interfaces are
-
 
 ```
   void cblas_dgemm(const enum CBLAS_ORDER Order, const enum CBLAS_TRANSPOSE TransA, const enum CBLAS_TRANSPOSE TransB, const int M, const int N, const int K, const double alpha, const double *A, const int lda, const double *B, const int ldb, const double beta, double *C, const int ldc)
@@ -28,7 +25,6 @@ The first argument ``Order`` specifies wheter we are using column major storage 
 ``TransA`` and ``TransB`` tell that the matrices should be taken as they are, so not transposed. The rest are the standard GEMM arguments, to perform the operation
 
 ```
- 
   C(M,N) = alpha*A(M,K)*B(K,N) + beta*C(K,N)
 ```
 
@@ -38,197 +34,105 @@ To compile and run the code, first submit an interactive job to the queue system
 
 On ORFEO: 
 ```
-
-  qsub -q gpu -l walltime=2:00:00 -l nodes=1:ppn=24 -I
-
+ qsub -q gpu -l walltime=2:00:00 -l nodes=1:ppn=24 -I
+```
 
 Load the needed module 
 
 ```
-
   module load intel
-
 ```  
 
-And type 
+In ``Makefile``  modify variable OPENBLASROOT with your installation path to OpenBLAS :
+```  
+OPENBLASROOT=/path_to_OpenBLAS
+```  
+and set the desired compilation flag (``-DUSE_FLOAT`` / ``-DUSE_DOUBLE``).
+
+Type 
 
 ```
-  make cpu
+make cpu
 ```
+
+Compilation will make use of the Intel MKL implementation, which is multithreaded. By default this variable has been set by the queue system to the number of cores requested at submission time (``ppn=24`` means ``OMP_NUM_THREADS=24``), but can be changed at runtime. by means of the  environment variable ``OMP_NUM_THREADS``
 
 To run the code simply issue
 
 ```
-
-  ./gemm.x 
-
-```
-
-With no argument it will calculate a matrix multiplication with M=2000 K=200 and N=1000.
-
-You can use positional argument to specify the size
+  ./gemm_mkl.x 
+  ./gemm_oblas.x
 
 ```
 
+With no argument it will calculate a matrix multiplication with M=2000 K=200 and N=1000 with OMP_NUM_THREADS set to number of processor you choose when you submit the the job ( 24 in this case)
+
+You can now use positional argument to specify the size
+
+```
   ./gemm.x 2000 1000 3000 
-
 ```
 
 will use M=2000 K=1000 and N=3000, so we will get C(2000,3000) = A(2000,1000)\*B(1000,3000)
 
-The present BLAS code is based on Intel MKL implementation, which is multithreaded. To control the number of threads you could use the environment variable ``OMP_NUM_THREADS``
+You can now play with the code varying the size of the matrix and also the number of threads.
 
-```
-
-  export OMP_NUM_THREADS=4
-```
-
-By default this variable has been set by the queue system to the number of cores requested at submission time (``ppn=24`` means ``OMP_NUM_THREADS=24``), but can be changed at runtime.
 
 ### OpenBLAS library.
 
+We can now download, compile and used OpenBLAS library to compare performance against MKL one.
 
-The file ``gemm_gpu.c`` contains the GPU version using cuBLAS. It also contains the BLAS version for timing comparison. 
+First get the library and the unpack it: 
 
-The cuBLAS code has been wrapped in a function called ``gpu_blas_dgemm`` in order to have the same interface of a standard cblas call. 
+``` 
+wget https://github.com/xianyi/OpenBLAS/releases/download/v0.3.13/OpenBLAS-0.3.13.tar.gz
+tar -xvzf OpenBLAS-0.3.13.tar.gz
+cd OpenBLAS-0.3.13
 
-The main parts of such function are 
-
-```
-
-  void gpu_blas_dgemm(CBLAS_ORDER layout, CBLAS_TRANSPOSE h_A_transp, CBLAS_TRANSPOSE h_B_transp,
-                    int m, int n, int k, const MYFLOAT alpha, const MYFLOAT* h_A, const int lda, const MYFLOAT* h_B, const int ldb,
-                    const MYFLOAT beta, MYFLOAT* h_C, const int ldc)
-  {
-    ...
-
-    //allocate device buffers
-
-    if ( cudaSuccess != cudaMalloc((void**)&d_A, m * k * sizeof(MYFLOAT)))
-        exit(1);
-
-    if ( cudaSuccess != cudaMalloc((void**)&d_B, k * n * sizeof(MYFLOAT)))
-        exit(1);
-
-    if ( cudaSuccess != cudaMalloc((void**)&d_C, m * n * sizeof(MYFLOAT)))
-        exit(1);
-
-    //copy A and B from Host to Device
-    cudaMemcpy(d_A,h_A, m * k * sizeof(MYFLOAT),cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B,h_B, k * n * sizeof(MYFLOAT),cudaMemcpyHostToDevice);
-
-    // Create a handle for CUBLAS
-    cublasHandle_t handle;
-    cublasCreate(&handle);
-
-    ...
-
-    // Do the actual multiplication
-    CUDAGEMM(handle, d_A_transp, d_A_transp, m, n, k, &alpha, d_A, lda, d_B, ldb, &beta, d_C, ldc);
-
-    //Copy results back to Host    
-    cudaMemcpy(h_C,d_C, m * n * sizeof(MYFLOAT),cudaMemcpyDeviceToHost);
-
-    // Destroy the handle
-    cublasDestroy(handle);
-
-    // Free device arrays
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
-
-  }
-
-```
-
-As you can see, to work with a GPU you need to allocate buffers on the device as well using ``cudaMalloc`` besides the buffer on the global memory, then you need to copy data to the device and the result
-back to the host, using ``cudaMemcpy``.
-
-This data movement costs quite some time, such that using cuBLAS becomes beneficial only for large matrices. However, matrices cannot be too big, since the GPU memory is typically way smaller that the system memory. 
-
-To compile code load the CUDA environment
-
-```
- module load cuda
-```
-
-and then issues:
-
-```
-  make gpu
-```
-
-To run, log into a node using the queue system
-
-```
-
-  qsub -q jrc -l walltime=2:00:00 -l nodes=1:ppn=24 -I
-```
-
-load the modules
-
-```
-
-  module load openblas/0.2.14/gnu/4.9.3
-  module load cuda/7.5
-```
-
-and then issue
-```
-
-  ./gemm_gpu.x 
 ``` 
 
-With no argument it will calculate a matrix multiplication with M=2000 K=200 and N=1000 
-You can use positiional argument to specify the size
+Compilation is straighforward according to the info provided  [here](https://github.com/xianyi/OpenBLAS/wiki/User-Manual#compile-the-library)
+
+We just need to do this on the computational node and to load the appropriate gnu compiler 
+
+``` 
+module load gnu
+make GCC=gcc FC=gfortran TARGET=SKYLAKEX
+make PREFIX=/u/dssc/$STUDENT/OpenBLASs-0.3.13 install
 ```
-
-  ./gemm_gpu.x 2000 1000 3000 
-```
-
-will use M=2000 K=1000 and N=3000, so we will get C(2000,3000) = A(2000,1000)\*B(1000,3000)
-
-The code runs first on GPU using cuBLAS, than on CPU using OpenBLAS calls
-The code prints elapsed time in both cases, and for the GPU call reports also the time spent in allocation of device buffers and data movement.
-
-You should see that for matrix of size around 10000, the GPU performs better than the CPU, even including the communication time.
-However, given the size of our GPUs, you cannot fit matrices larger that 20000x20000.
-
-You could also test the performance of double precision calculation. To this end, in ``Makefile`` at line 12 modify  ``-DUSE_FLOAT`` in ``-DUSE_DOUBLE``.
-
-Then issue
+This should be enough: architecture shoud be recognized automatically (as skylakex) and so AVX512 SIMD vector will be used.
+At the end of compilation you should see something like that:
 
 ```
+ OpenBLAS build complete. (BLAS CBLAS LAPACK LAPACKE)
 
-  make clean
-  make gpu
+  OS               ... Linux
+  Architecture     ... x86_64
+  BINARY           ... 64bit
+  C compiler       ... GCC        (cmd & version : GNU GCC 9.3.0))
+  Fortran compiler ... GFORTRAN  (cmd & version : GNU Fortran (GCC) 9.3.0)
+  Library Name     ... libopenblas_skylakexp-r0.3.13.a (Multi-threading; Max num-threads is 24)
+
 ```
-
-With double precision, you cannot fit matrices larger that 14000x14000 on the GPU memory on K20x (C3HPC and old Uliysses partition)
-
-The performance in double precision should be roughly half of the performance in single precision. 
-(This is NOT in general true for consumer-level GPUs (NVidia GTX e.g.) . This is due to the fact that such GPUs have a much lower count of double precision registers. 
-The Tesla series instead have typically twice as much single precision register compared to double precision.) 
+Include the OpenBLAS library:
+```  
+export LD_LIBRARY_PATH=/path_to_OpenBlas:$LD_LIBRARY_PATH
+```  
 
 #### Proposed Exercise
 
-- Increasing the matrices size up to 20000x20000 (single precision) or 14000x14000 (double precision) analyse the scaling of the GEMM calculation, for both CPU  and GPU and find the size for which the GPU is beneficial. Plot your results.
+- Increasing the matrices size up to 20000x20000 (single precision) or 14000x14000 (double precision) analyse the scaling of the GEMM calculation over the possible number of threads
 
-- Repeat the analysis for different values of OMP_NUM_THREADS. (Remember, this effect only the CPU BLAS, not the cuBLAS)
- 
-```
-    export OMP_NUM_THREADS=4
-```
+- Keep the number of threads fixed to one and play with different size comparing the two different libraries.
 
-#### Fortran Interface to cublas
-
-see here:
-
- - https://docs.nvidia.com/cuda/cublas/index.html#appendix-b-cublas-fortran-bindings
 
 #### More resources
 
 
-For further information please visit the official cuBLAS page:
+For further information please visit the official openBLAS page:
 
-  - https://docs.nvidia.com/cuda/cublas/index.html
+  - http://www.openblas.net/
+
+#### Results
+
+![MKL_vs_oBLAS](/uploads/7278b8074155d3898c10315f34ecd746/MKL_vs_oBLAS.png)
