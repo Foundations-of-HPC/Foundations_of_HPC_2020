@@ -13,7 +13,7 @@ Get the package and unpack it in some location on your home directory, then crea
     cd OpenBLAS-0.3.13
 	mkdir ../openblas-0.3.13
 
-Now get a node on the cluster and retrrn in the OpenBLAS-0.3.13 folder.
+Now get a node on the cluster and return in the OpenBLAS-0.3.13 folder.
 We load the gnu module to compile the library using gcc with the appropriate `TARGET` CPU, in our case `SKYLAKEX`. 
 We then install the library passing the variable `PREFIX` with the absolute path of the install folder we have just created:
 
