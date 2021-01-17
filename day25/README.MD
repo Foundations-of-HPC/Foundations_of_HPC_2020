@@ -8,6 +8,7 @@ date: Monday 18/01/2021
 ### references
   - [the CEPH arcitecture](https://docs.ceph.com/en/latest/architecture/)
   - [a short introduction to CEPH](https://www.openshift.com/blog/openshift-container-storage-4-introduction-to-ceph)
+  - [Interesting guide for best practices of parallel I/O](https://prace-ri.eu/wp-content/uploads/Best-Practice-Guide_Parallel-IO.pdf)
   
 ### tutorials/exercise
   - [a guided tour on Orfeo storage system] 
