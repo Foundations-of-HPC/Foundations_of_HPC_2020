@@ -99,7 +99,7 @@ int main(int argc, char** argv)
         C[i] = 0.0;
     }
 
-    sleep(5);
+    sleep(1);
     printf (" Computing matrix product using gemm function via CBLAS interface \n");
     clock_gettime(CLOCK_MONOTONIC, &begin);
     GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans,
