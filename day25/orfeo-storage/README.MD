@@ -24,12 +24,80 @@ tmpfs                                                                      1.9G 
 ```
 
 We noted that the local disk ```/dev/sda1``` is a virtual disks.
-Let us now estimate basic performance by means of the simple  `dd ` command 
 
+Let us now:
+
+- Identify your FileSystem and its properties
+
+```
+[cozzini@login Foundations_of_HPC_2020]$ mount  | grep vda
+/dev/vda1 on / type xfs (rw,relatime,attr2,inode64,noquota)
+```
+
+- Measure/Estimate the rough performance  of our by means of the simple  `dd ` command.
+
+First: 1 single block from ``/dev/zero`` to ``/dev/null``
+```
+[cozzini@login Foundations_of_HPC_2020]$ dd if=/dev/zero  of=/dev/null count=1
+1+0 records in
+1+0 records out
+512 bytes (512 B) copied, 8.3995e-05 s, 6.1 MB/s
+```
+Then 1 milliobn block:
+```
+[cozzini@login Foundations_of_HPC_2020]$ dd if=/dev/zero  of=/dev/null count=1M
+1048576+0 records in
+1048576+0 records out
+536870912 bytes (537 MB) copied, 2.64147 s, 203 MB/s
+[cozzini@login Foundations_of_HPC_2020]$
+```
+Performance is not excellent, due to the standard blocksize.
+Let us try now on the local disk:
+
+```
+cozzini@login tmp]$ dd if=/dev/zero  of=/tmp/big count=1M
+1048576+0 records in
+1048576+0 records out
+536870912 bytes (537 MB) copied, 4.05241 s, 132 MB/s
+```
+and on our home directory:
+
+```
+[cozzini@login tmp]$ dd if=/dev/zero  of=~/big count=1M
+1048576+0 records in
+1048576+0 records out
+536870912 bytes (537 MB) copied, 5.09671 s, 105 MB/s
+
+```
+
+- Compare it with the ramfs on login node:
+
+```
+[cozzini@login tmp]$ dd if=/dev/zero  of=/dev/shm/big count=1M
+1048576+0 records in
+1048576+0 records out
+536870912 bytes (537 MB) copied, 3.53512 s, 152 MB/s
+
+```
+
+We can now redo all the tests on a computing node.
 
 
 
 ## CEPH filesystem 
+
+Let us now focus on CEPHfs:
+
+ - identify the FS:
+
+```
+[cozzini@login Foundations_of_HPC_2020]$ mount  | grep fast
+10.128.6.211:6789,10.128.6.212:6789,10.128.6.213:6789,10.128.6.214:6789:/ on /fast type ceph (rw,relatime,name=admin,secret=<hidden>,acl,mds_namespace=cephfs,wsize=16777216)
+[cozzini@login Foundations_of_HPC_2020]$ mount  | grep large
+10.128.6.211:6789,10.128.6.213:6789,10.128.6.212:6789,10.128.6.214:6789:/ on /large type ceph (rw,relatime,name=admin,secret=<hidden>,acl,mds_namespace=cephfs_spin,wsize=16777216)
+
+```
+
 
 
 ## Long term storage
